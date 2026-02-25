@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Portfolio | Développeur Web</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="bg-dark text-light">
+    <header class="fixed-nav">
+        <nav class="container">
+            <div class="logo">Lyam<span>.</span></div>
+            <ul class="nav-links">
+                <li><a href="#hero">Accueil</a></li>
+                <li><a href="#skills">Compétences</a></li>
+                <li><a href="#experiences">Expériences</a></li>
+                <li><a href="#formations">Formation</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="menu-toggle"><span></span></div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="hero-section">
+            <div class="grid-pattern"></div>
+            <div class="container hero-container">
+                <div class="profile-card-static reveal active">
+                    <span class="availability">DISPONIBLE EN ALTERNANCE</span>
+                    <h1 class="profile-name">Lyam Mafray-Lizé</h1>
+                    <p class="profile-title">AI & Data Analyst<span class="education">Bac+3 à l'école EPSI Rennes</span>
+                    </p>
+
+                    <div class="profile-tags-inline">
+                        <span class="p-tag p-tag-outline">1 sem. école / 2 sem. entreprise</span>
+                        <span class="p-tag p-tag-outline">Rennes · Le Mans · Laval</span>
+                    </div>
+
+                    <div class="profile-contact-row">
+                        <a href="mailto:ly.mafraylize@gmail.com" class="p-info-box">ly.mafraylize@gmail.com</a>
+                        <a href="tel:0658429331" class="p-info-box">06 58 42 93 31</a>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-indicator">
+                <span></span>
+            </div>
+        </section>
+
+        <section id="looking-for" class="looking-for-section py-20">
+            <div class="container">
+                <h2 class="section-title">Ce que je cherche</h2>
+                <div class="search-grid reveal">
+                    <div class="search-card">
+                        <span class="label">DOMAINE</span>
+                        <h3>Data Engineering</h3>
+                        <p>Intelligence Artificielle</p>
+                    </div>
+                    <div class="search-card">
+                        <span class="label">RYTHME</span>
+                        <h3>1 sem. école</h3>
+                        <p>2 sem. entreprise</p>
+                    </div>
+                    <div class="search-card">
+                        <span class="label">LOCALISATION</span>
+                        <h3>Bretagne, Pays de la Loire</h3>
+                        <p>Rennes · Le Mans · Laval</p>
+                    </div>
+                    <div class="search-card">
+                        <span class="label">DISPONIBILITÉ</span>
+                        <h3>Septembre 2026</h3>
+                        <p>Bac+3</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="skills-section py-20">
+            <div class="container">
+                <h2 class="section-title">Compétences</h2>
+                <p class="section-subtitle-small">HARD SKILLS</p>
+                <div class="skills-grid reveal">
+                    <!-- Data & IA -->
+                    <div class="skill-card">
+                        <div class="card-header">
+                            <span class="icon">📊</span>
+                            <h3>Data & IA</h3>
+                        </div>
+                        <div class="tags">
+                            <span class="tag">Python</span>
+                            <span class="tag">Pandas</span>
+                            <span class="tag">SQL</span>
+                            <span class="tag">PostgreSQL</span>
+                            <span class="tag">MongoDB</span>
+                            <span class="tag">Data Mining</span>
+                            <span class="tag">OpenAI API</span>
+                            <span class="tag">Streamlit</span>
+                        </div>
+                    </div>
+                    <!-- Web Scraping -->
+                    <div class="skill-card">
+                        <div class="card-header">
+                            <span class="icon">🕷️</span>
+                            <h3>Web Scraping & Automatisation</h3>
+                        </div>
+                        <div class="tags">
+                            <span class="tag">Selenium</span>
+                            <span class="tag">Requests</span>
+                            <span class="tag">BeautifulSoup</span>
+                            <span class="tag">Scrapy</span>
+                            <span class="tag">API REST</span>
+                            <span class="tag">Flask</span>
+                            <span class="tag">FastAPI</span>
+                            <span class="tag">Cron</span>
+                            <span class="tag">Airtable API</span>
+                        </div>
+                    </div>
+                    <!-- Web Dev -->
+                    <div class="skill-card">
+                        <div class="card-header">
+                            <span class="icon">💻</span>
+                            <h3>Développement Web</h3>
+                        </div>
+                        <div class="tags">
+                            <span class="tag">Node.js</span>
+                            <span class="tag">Vue.js</span>
+                            <span class="tag">React</span>
+                            <span class="tag">JavaScript</span>
+                            <span class="tag">TypeScript</span>
+                            <span class="tag">HTML/CSS</span>
+                            <span class="tag">Vite.js</span>
+                        </div>
+                    </div>
+                    <!-- DevOps -->
+                    <div class="skill-card">
+                        <div class="card-header">
+                            <span class="icon">⚙️</span>
+                            <h3>DevOps & Infra</h3>
+                        </div>
+                        <div class="tags">
+                            <span class="tag">Docker</span>
+                            <span class="tag">Git</span>
+                            <span class="tag">GitHub</span>
+                            <span class="tag">Coolify</span>
+                            <span class="tag">VPS</span>
+                            <span class="tag">Nginx</span>
+                            <span class="tag">Linux</span>
+                            <span class="tag">Redis</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="section-subtitle-small" style="margin-top: 5rem;">SOFT SKILLS</p>
+                <div class="soft-skills-grid reveal">
+                    <div class="soft-skill-card">
+                        <h3>Autonomie</h3>
+                        <p>Capable de mener des projets complexes de A à Z sans supervision constante.</p>
+                    </div>
+                    <div class="soft-skill-card">
+                        <h3>Curiosité</h3>
+                        <p>Passion pour les nouvelles technologies.</p>
+                    </div>
+                    <div class="soft-skill-card">
+                        <h3>Rigueur</h3>
+                        <p>Mes clients on toujours été satisfaits de la qualité de mes travaux.</p>
+                    </div>
+                    <div class="soft-skill-card">
+                        <h3>Esprit entrepreneurial</h3>
+                        <p>Co-fondateur de 2 startups, en plus d'avoir une vision tech j'également une vision produit et
+                            business.</p>
+                    </div>
+                    <div class="soft-skill-card">
+                        <h3>Communication</h3>
+                        <p>Contact direct avec les clients, définition du brief, suivi de mission.</p>
+                    </div>
+                    <div class="soft-skill-card">
+                        <h3>Adaptabilité</h3>
+                        <p>Projets variés : santé, immobilier, e-commerce, formation, conseil, j'ai pu travailler dans
+                            des environnements très différents.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="experiences" class="experience-section py-20">
+            <div class="container">
+                <h2 class="section-title">Expériences</h2>
+                <div class="experience-timeline">
+                    <!-- Freelance -->
+                    <div class="exp-item reveal">
+                        <div class="exp-dot"></div>
+                        <div class="exp-content">
+                            <div class="exp-header">
+                                <h3>Freelance — Expert Web Scraping</h3>
+                                <span class="exp-date">Juillet 2024 – Aujourd'hui</span>
+                            </div>
+                            <p class="exp-subtitle">Data Engineer & Développeur Python</p>
+                            <ul class="exp-points">
+                                <li>API de scraping multi-sources (10 000 jeux de société pour IA)</li>
+                                <li>Extraction de 50 000+ tarifs hôteliers pour analyse concurrentielle (Simon-Kucher &
+                                    Partners)</li>
+                                <li>API d'analyse de factures pour gestion de cabinet dentaire (Adamy)</li>
+                                <li>Pipeline d'extraction d'offres d'alternance (Nellapp, INGETIS)</li>
+                                <li>Extraction de 80 000 professionnels de santé issus de 32 sources web différentes
+                                    (SAS Liberlo)</li>
+                            </ul>
+                            <div class="exp-tags">
+                                <span class="tag-box">Python</span>
+                                <span class="tag-box">Flask</span>
+                                <span class="tag-box">Selenium</span>
+                                <span class="tag-box">Docker</span>
+                                <span class="tag-box">API REST</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Conversium -->
+                    <div class="exp-item reveal">
+                        <div class="exp-dot"></div>
+                        <div class="exp-content">
+                            <div class="exp-header">
+                                <h3>Conversium</h3>
+                                <span class="exp-date">Août 2022 – Août 2025</span>
+                            </div>
+                            <p class="exp-subtitle">Développeur Web & Data</p>
+                            <ul class="exp-points">
+                                <li>Développement de sites et d'applications web</li>
+                                <li>Développement de solutions de scraping & data (14 000 contacts artisans)</li>
+                                <li>Maintenance et optimisation d'environnements web</li>
+                                <li>Gestion et intégration de serveurs</li>
+                                <li>Intégration de solutions d'intelligence artificielle</li>
+                            </ul>
+                            <div class="exp-tags">
+                                <span class="tag-box">Python</span>
+                                <span class="tag-box">Pandas</span>
+                                <span class="tag-box">Web Scraping</span>
+                                <span class="tag-box">Node.js</span>
+                                <span class="tag-box">VPS</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dwell -->
+                    <div class="exp-item reveal">
+                        <div class="exp-dot"></div>
+                        <div class="exp-content">
+                            <div class="exp-header">
+                                <h3>Dwell</h3>
+                                <span class="exp-date">Mars 2024 – Mars 2025</span>
+                            </div>
+                            <p class="exp-subtitle">Co-fondateur & Développeur</p>
+                            <ul class="exp-points">
+                                <li>API de scraping immobilier agrégeant 160 000+ annonces de location en France</li>
+                                <li>Pipeline multi-sources avec déduplication avancée</li>
+                                <li>Mise à jour quotidienne automatisée, API REST sécurisée</li>
+                                <li>Développement frontend de l'application et de la landing page</li>
+                            </ul>
+                            <div class="exp-tags">
+                                <span class="tag-box">Python</span>
+                                <span class="tag-box">PostgreSQL</span>
+                                <span class="tag-box">Docker</span>
+                                <span class="tag-box">API REST</span>
+                                <span class="tag-box">Vue.js</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Insère Ta Com -->
+                    <div class="exp-item reveal">
+                        <div class="exp-dot"></div>
+                        <div class="exp-content">
+                            <div class="exp-header">
+                                <h3>Insère Ta Com</h3>
+                                <span class="exp-date">Mars 2023 – Mars 2024</span>
+                            </div>
+                            <p class="exp-subtitle">Co-fondateur & Développeur</p>
+                            <ul class="exp-points">
+                                <li>Application IA de génération de prompts pour Midjourney</li>
+                                <li>Plateforme d'audit de réseaux sociaux avec extraction de données Instagram</li>
+                                <li>Pipeline de traitement via OpenAI API</li>
+                            </ul>
+                            <div class="exp-tags">
+                                <span class="tag-box">Python</span>
+                                <span class="tag-box">OpenAI API</span>
+                                <span class="tag-box">Data Pipeline</span>
+                                <span class="tag-box">Web Scraping</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="formations" class="formation-section py-20 bg-alt">
+            <div class="container">
+                <h2 class="section-title">Formation</h2>
+                <div class="formation-list">
+                    <!-- Bac+3 -->
+                    <div class="formation-card reveal">
+                        <div class="form-year">2025</div>
+                        <div class="form-details">
+                            <h3>Bac+3 — Concepteur Développeur d'Applications</h3>
+                            <p class="form-school">EKOD</p>
+                            <p class="form-desc">Formation orientée développement logiciel, architecture applicative et
+                                conception de systèmes.</p>
+                        </div>
+                    </div>
+                    <!-- Bac+2 -->
+                    <div class="formation-card reveal">
+                        <div class="form-year">2024</div>
+                        <div class="form-details">
+                            <h3>Bac+2 — Webconcepteur</h3>
+                            <p class="form-school">EKOD</p>
+                            <p class="form-desc">Développement web fullstack, UX/UI, intégration et conception de
+                                solutions web.</p>
+                        </div>
+                    </div>
+                    <!-- Licence -->
+                    <div class="formation-card reveal">
+                        <div class="form-year">2022</div>
+                        <div class="form-details">
+                            <h3>1ère année de licence d'informatique</h3>
+                            <p class="form-school">Le Mans Université</p>
+                            <p class="form-desc">Fondamentaux de l'informatique : algorithmique, bases de données,
+                                systèmes.</p>
+                        </div>
+                    </div>
+                    <!-- CLOE -->
+                    <div class="formation-card reveal">
+                        <div class="form-year">2024</div>
+                        <div class="form-details">
+                            <h3>Certification CLOE Anglais — Niveau B1+</h3>
+                            <p class="form-school">EKOD</p>
+                            <p class="form-desc">Capacité professionnelle à m'exprimer en anglais.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="certifications" class="certifications-section py-20">
+            <div class="container">
+                <h2 class="section-title">Certifications</h2>
+                <div class="cert-grid reveal">
+                    <!-- Kaggle Group -->
+                    <div class="cert-group-card">
+                        <div class="cert-provider-header">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Kaggle_logo.png" alt="Kaggle">
+                            <h3>Kaggle</h3>
+                        </div>
+                        <div class="cert-list">
+                            <button class="cert-item" data-cert="./certifications/kaggle/Lyam Mafray-Lize - Python.png">
+                                <span class="cert-icon">📜</span>
+                                <span class="cert-name">Python</span>
+                                <span class="view-hint">Voir</span>
+                            </button>
+                            <button class="cert-item" data-cert="./certifications/kaggle/Lyam Mafray-Lize - Pandas.png">
+                                <span class="cert-icon">📜</span>
+                                <span class="cert-name">Pandas</span>
+                                <span class="view-hint">Voir</span>
+                            </button>
+                            <button class="cert-item"
+                                data-cert="./certifications/kaggle/Lyam Mafray-Lize - Intro to Machine Learning.png">
+                                <span class="cert-icon">📜</span>
+                                <span class="cert-name">Intro to ML</span>
+                                <span class="view-hint">Voir</span>
+                            </button>
+                            <button class="cert-item"
+                                data-cert="./certifications/kaggle/Lyam Mafray-Lize - Intermediate Machine Learning.png">
+                                <span class="cert-icon">📜</span>
+                                <span class="cert-name">Intermediate ML</span>
+                                <span class="view-hint">Voir</span>
+                            </button>
+                            <button class="cert-item"
+                                data-cert="./certifications/kaggle/Lyam Mafray-Lize - Feature Engineering.png">
+                                <span class="cert-icon">📜</span>
+                                <span class="cert-name">Feature Engineering</span>
+                                <span class="view-hint">Voir</span>
+                            </button>
+                            <button class="cert-item"
+                                data-cert="./certifications/kaggle/Lyam Mafray-Lize - Data Visualization.png">
+                                <span class="cert-icon">📜</span>
+                                <span class="cert-name">Data Visualization</span>
+                                <span class="view-hint">Voir</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- DataCamp Group -->
+                    <div class="cert-group-card">
+                        <div class="cert-provider-header">
+                            <img src="https://www.datacamp.com/assets/datacamp-logo-e9e51296561e1b5c4746f33d45cc95b5.png"
+                                alt="DataCamp">
+                            <h3>DataCamp</h3>
+                        </div>
+                        <div class="cert-list">
+                            <button class="cert-item" data-cert="./certifications/datacamp/openai API certificate.pdf">
+                                <span class="cert-icon">📄</span>
+                                <span class="cert-name">OpenAI API</span>
+                                <span class="view-hint">Ouvrir</span>
+                            </button>
+                            <button class="cert-item"
+                                data-cert="./certifications/datacamp/prompt engineering certificate.pdf">
+                                <span class="cert-icon">📄</span>
+                                <span class="cert-name">Prompt Engineering</span>
+                                <span class="view-hint">Ouvrir</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="languages" class="languages-section py-20 bg-dark-secondary">
+            <div class="container container-narrow">
+                <h2 class="section-title">Langues</h2>
+                <div class="languages-grid reveal">
+                    <!-- Français -->
+                    <div class="language-card">
+                        <div class="lang-info">
+                            <h3>Français</h3>
+                            <p>Langue natale — Maîtrise totale</p>
+                        </div>
+                        <div class="lang-level-sticks" data-level="5">
+                            <span class="stick full"></span>
+                            <span class="stick full"></span>
+                            <span class="stick full"></span>
+                            <span class="stick full"></span>
+                            <span class="stick full"></span>
+                        </div>
+                    </div>
+
+                    <!-- Anglais -->
+                    <div class="language-card">
+                        <div class="lang-info">
+                            <h3>Anglais</h3>
+                            <p>C2- — Professionnel complet</p>
+                        </div>
+                        <div class="lang-level-sticks" data-level="4.5">
+                            <span class="stick full"></span>
+                            <span class="stick full"></span>
+                            <span class="stick full"></span>
+                            <span class="stick full"></span>
+                            <span class="stick half"></span>
+                        </div>
+                    </div>
+
+                    <!-- Espagnol -->
+                    <div class="language-card">
+                        <div class="lang-info">
+                            <h3>Espagnol</h3>
+                            <p>B1 — Intermédiaire</p>
+                        </div>
+                        <div class="lang-level-sticks" data-level="3">
+                            <span class="stick full"></span>
+                            <span class="stick full"></span>
+                            <span class="stick full"></span>
+                            <span class="stick empty"></span>
+                            <span class="stick empty"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cert Modal -->
+        <div id="cert-modal" class="modal">
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <button class="modal-close">&times;</button>
+                <div id="modal-media-container">
+                    <img id="modal-img" src="" alt="Certification" style="display: none;">
+                    <iframe id="modal-pdf" src=""
+                        style="display: none; width: 100%; height: 80vh; border: none;"></iframe>
+                </div>
+            </div>
+        </div>
+
+
+        <section id="contact" class="contact-section py-20">
+            <div class="container">
+                <h2 class="section-title">Contact</h2>
+                <div class="contact-card reveal">
+                    <p>Vous avez un projet en tête ? Parlons-en !</p>
+                    <a href="mailto:ly.mafraylize@gmail.com" class="email-link">ly.mafraylize@gmail.com</a>
+                    <div class="social-links"
+                        style="margin-top: 3rem; display: flex; justify-content: center; gap: 2rem;">
+                        <a href="#" class="btn btn-outline">GitHub</a>
+                        <a href="#" class="btn btn-outline">LinkedIn</a>
+                        <a href="#" class="btn btn-outline">Twitter</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="py-10">
+        <div class="container text-center">
+            <p>&copy; 2025 Lyam. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script type="module" src="./main.js"></script>
+</body>
+
+</html>
