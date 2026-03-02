@@ -1,6 +1,6 @@
 services:
   portfolio:
     build: .
-    ports:
-      - "5142:80"
+    expose:
+      - "80"
     restart: unless-stopped
