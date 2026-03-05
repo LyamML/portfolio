@@ -936,6 +936,19 @@ h3 {
     color: var(--primary);
 }
 
+.social-links a {
+    color: var(--text-light);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.1rem;
+    transition: var(--transition);
+}
+
+.social-links a:hover {
+    color: var(--primary);
+    transform: translateY(-2px);
+}
+
 /* Utility Animations */
 .reveal {
     opacity: 0;
