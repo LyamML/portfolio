@@ -1,11 +1,13 @@
 :root {
     --bg-dark: #0a0a0c;
     --bg-alt: #121216;
+    --bg-card-dark: rgba(255, 255, 255, 0.02);
     --text-light: #f0f0f5;
-    --text-gray: #a0a0b0;
-    --primary: #6366f1;
-    --primary-glow: rgba(99, 102, 241, 0.4);
+    --text-gray: #b0b0c5;
+    --primary: #2563eb;
+    --primary-glow: rgba(37, 99, 235, 0.4);
     --accent: #10b981;
+    --border-light: rgba(255, 255, 255, 0.15);
     --font-main: 'Inter', sans-serif;
     --font-heading: 'Outfit', sans-serif;
     --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -102,7 +104,8 @@ h3 {
 .fixed-nav.scrolled {
     background: rgba(10, 10, 12, 0.9);
     height: 70px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid var(--border-light);
 }
 
 .fixed-nav nav {
@@ -251,7 +254,7 @@ h3 {
 .p-tag-outline {
     background: transparent;
     color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-light);
 }
 
 .p-tag:hover {
@@ -271,7 +274,7 @@ h3 {
     background: transparent;
     /* Match outline tags */
     color: var(--text-gray);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-light);
     padding: 0.6rem 1.5rem;
     /* Match p-tag exactly */
     font-size: 0.9rem;
@@ -296,7 +299,7 @@ h3 {
     transform: translateX(-50%);
     width: 26px;
     height: 44px;
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    border: 2px solid var(--border-light);
     border-radius: 20px;
 }
 
@@ -335,7 +338,7 @@ h3 {
 
 .search-card {
     background: rgba(255, 255, 255, 0.01);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-light);
     padding: 3rem;
     transition: var(--transition);
 }
@@ -377,7 +380,7 @@ h3 {
 .skill-card {
     background: rgba(255, 255, 255, 0.02);
     padding: 3rem;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-light);
     transition: var(--transition);
 }
 
@@ -414,6 +417,13 @@ h3 {
     border-radius: 4px;
     font-size: 0.95rem;
     font-weight: 700;
+    transition: var(--transition);
+}
+
+.tag:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(37, 99, 235, 0.2);
+    background: #fff;
 }
 
 /* Soft Skills */
@@ -425,7 +435,7 @@ h3 {
 
 .soft-skill-card {
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-light);
     padding: 2.5rem;
     transition: var(--transition);
 }
@@ -452,7 +462,25 @@ h3 {
     max-width: 900px;
     margin: 0 auto;
     padding-left: 4rem;
-    border-left: 2px solid rgba(255, 255, 255, 0.1);
+    border-left: 2px solid var(--border-light);
+}
+
+.timeline-cursor-dot {
+    position: absolute;
+    left: -7px;
+    width: 12px;
+    height: 12px;
+    background: var(--primary);
+    border-radius: 50%;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.1s ease-out;
+    box-shadow: 0 0 15px var(--primary);
+}
+
+.experience-timeline:hover .timeline-cursor-dot {
+    opacity: 1;
 }
 
 .exp-item {
@@ -474,7 +502,7 @@ h3 {
 
 .exp-content {
     background: rgba(255, 255, 255, 0.01);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-light);
     padding: 3rem;
     transition: var(--transition);
 }
@@ -482,6 +510,7 @@ h3 {
 .exp-content:hover {
     background: rgba(255, 255, 255, 0.03);
     border-color: var(--primary);
+    transform: translateY(-5px);
 }
 
 .exp-header {
@@ -543,7 +572,7 @@ h3 {
     padding: 0.5rem 1rem;
     font-size: 0.8rem;
     font-weight: 800;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-light);
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
@@ -560,7 +589,8 @@ h3 {
 .formation-card {
     display: grid;
     grid-template-columns: 140px 1fr;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-light);
+    background: var(--bg-card-dark);
     padding: 3.5rem;
     gap: 3.5rem;
     align-items: center;
@@ -569,7 +599,8 @@ h3 {
 
 .formation-card:hover {
     border-color: var(--primary);
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(255, 255, 255, 0.04);
+    transform: translateY(-5px);
 }
 
 .form-year {
@@ -610,7 +641,7 @@ h3 {
 
 .cert-group-card {
     background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-light);
     padding: 3rem;
     transition: var(--transition);
 }
@@ -625,13 +656,12 @@ h3 {
     align-items: center;
     gap: 1.5rem;
     margin-bottom: 2.5rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--border-light);
     padding-bottom: 1.5rem;
 }
 
 .cert-provider-header img {
     height: 30px;
-    filter: invert(1) brightness(2);
     opacity: 0.9;
 }
 
@@ -647,7 +677,7 @@ h3 {
     gap: 1.2rem;
     padding: 1.25rem 1.5rem;
     background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-light);
     color: var(--text-light);
     text-align: left;
     width: 100%;
@@ -741,7 +771,7 @@ h3 {
     height: auto;
     border-radius: 4px;
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-light);
 }
 
 .modal-close {
@@ -769,7 +799,7 @@ h3 {
     padding: 6rem 3rem;
     border-radius: 40px;
     text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-light);
 }
 
 .email-link {

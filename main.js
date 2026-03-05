@@ -111,4 +111,20 @@ document.addEventListener('DOMContentLoaded', () => {
             grid.style.transform = `translate(calc(-5% + ${moveX}px), calc(-5% + ${moveY}px))`;
         });
     }
+
+    // Timeline Cursor Tracker
+    const timeline = document.querySelector('.experience-timeline');
+    const timelineDot = document.querySelector('.timeline-cursor-dot');
+
+    if (timeline && timelineDot) {
+        timeline.addEventListener('mousemove', (e) => {
+            const rect = timeline.getBoundingClientRect();
+            const y = e.clientY - rect.top;
+
+            // Constrain the dot within the timeline boundaries
+            if (y >= 0 && y <= rect.height) {
+                timelineDot.style.transform = `translateY(${y}px)`;
+            }
+        });
+    }
 });
