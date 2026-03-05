@@ -272,17 +272,19 @@ h3 {
 
 .p-info-box {
     background: transparent;
-    /* Match outline tags */
     color: var(--text-gray);
     border: 1px solid var(--border-light);
     padding: 0.6rem 1.5rem;
-    /* Match p-tag exactly */
-    font-size: 0.9rem;
-    /* Match p-tag exactly */
+    font-size: clamp(0.8rem, 2.5vw, 0.9rem);
     font-weight: 600;
     border-radius: 50px;
     text-decoration: none;
     transition: var(--transition);
+    max-width: 100%;
+    word-break: break-all;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .p-info-box:hover {
@@ -372,47 +374,104 @@ h3 {
 
 /* Hard Skills */
 .skills-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 2rem;
+    display: flex;
+    gap: 0;
+    height: 600px;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-light);
 }
 
 .skill-card {
-    background: rgba(255, 255, 255, 0.02);
-    padding: 3rem;
-    border: 1px solid var(--border-light);
-    transition: var(--transition);
+    flex: 1;
+    background: rgba(255, 255, 255, 0.01);
+    padding: 2rem;
+    border-right: 1px solid var(--border-light);
+    transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    text-align: center;
+}
+
+.skill-card:last-child {
+    border-right: none;
 }
 
 .skill-card:hover {
-    border-color: var(--primary);
+    flex: 6;
     background: rgba(255, 255, 255, 0.04);
 }
 
 .card-header {
     display: flex;
+    flex-direction: column;
     align-items: center;
     gap: 1.5rem;
-    margin-bottom: 2.5rem;
+    margin-bottom: 0;
+    transition: margin 0.4s ease;
 }
 
-.card-header .icon {
-    font-size: 1.8rem;
+.skill-card:hover .card-header {
+    margin-bottom: 2rem;
 }
 
-.card-header h3 {
-    font-size: 1.6rem;
+.category-icon {
+    font-size: 3rem;
+    transition: transform 0.4s ease;
+}
+
+.skill-card:hover .category-icon {
+    transform: scale(1.1);
+}
+
+.header-text {
+    opacity: 1;
+    transition: opacity 0.4s ease;
+}
+
+.header-text h3 {
+    font-size: 1.4rem;
+    white-space: normal;
+    max-width: 150px;
+    line-height: 1.2;
+}
+
+/* Hide text in contracted cards */
+.skills-grid:has(.skill-card:hover) .skill-card:not(:hover) .header-text {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Hide tags in contracted cards */
+.skill-card:not(:hover) .tags {
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+    max-height: 0;
+}
+
+/* Show tags in expanded card */
+.skill-card:hover .tags {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 500px;
 }
 
 .tags {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 0.8rem;
+    transition: opacity 0.2s ease, transform 0.5s ease 0.1s, max-height 0.4s ease;
 }
 
 .tag {
-    background: #f1f1e6;
-    color: #1a1a1a;
+    background: var(--primary);
+    color: #fff;
     padding: 0.6rem 1.2rem;
     border-radius: 4px;
     font-size: 0.95rem;
@@ -422,8 +481,7 @@ h3 {
 
 .tag:hover {
     transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(37, 99, 235, 0.2);
-    background: #fff;
+    box-shadow: 0 4px 12px var(--primary-glow);
 }
 
 /* Soft Skills */
@@ -434,7 +492,7 @@ h3 {
 }
 
 .soft-skill-card {
-    background: transparent;
+    background: rgba(255, 255, 255, 0.01);
     border: 1px solid var(--border-light);
     padding: 2.5rem;
     transition: var(--transition);
@@ -567,12 +625,11 @@ h3 {
 }
 
 .tag-box {
-    background: #000;
+    background: var(--primary);
     color: #fff;
     padding: 0.5rem 1rem;
     font-size: 0.8rem;
     font-weight: 800;
-    border: 1px solid var(--border-light);
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
@@ -719,6 +776,68 @@ h3 {
 .cert-item:hover .view-hint {
     opacity: 1;
     transform: translateX(0);
+}
+
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 2.2rem;
+        margin-bottom: 3rem;
+    }
+
+    .py-20 {
+        padding-top: 5rem;
+        padding-bottom: 5rem;
+    }
+
+    .hero-content {
+        padding-top: 10vh;
+    }
+
+    .experience-timeline {
+        padding-left: 2rem;
+    }
+
+    .exp-content {
+        padding: 2rem;
+    }
+
+    .formation-card {
+        grid-template-columns: 1fr;
+        padding: 2rem;
+        gap: 2rem;
+    }
+
+    .formation-year {
+        font-size: 1.2rem;
+        border-bottom: 1px solid var(--border-light);
+        padding-bottom: 1rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .skills-grid {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .skill-card {
+        flex: none !important;
+        margin-bottom: 1rem;
+    }
+
+    .skill-card:hover {
+        transform: none;
+    }
+
+    .skill-card .header-text {
+        opacity: 1 !important;
+    }
+
+    .skill-card .tags {
+        opacity: 1 !important;
+        transform: none !important;
+        pointer-events: all !important;
+    }
 }
 
 /* Modal System */
