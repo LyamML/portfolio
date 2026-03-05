@@ -1,6 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
   <rect width="100" height="100" fill="#0a0a0c" rx="20"/>
-  <text x="48%" y="54%" dominant-baseline="central" text-anchor="middle" font-family="Arial, sans-serif" font-weight="900" transform="scale(0.9, 1.2) translate(5, -8)" fill="#f0f0f5">
-    L<tspan fill="#1d6ef1" dx="5">.</tspan>
-  </text>
+  <!-- L Letter -->
+  <rect x="15" y="20" width="18" height="42" fill="#f0f0f5"/>
+  <rect x="15" y="62" width="45" height="18" fill="#f0f0f5"/>
+  <!-- The Dot (Square, aligned bottom) -->
+  <rect x="70" y="62" width="18" height="18" fill="#1d6ef1"/>
 </svg>
