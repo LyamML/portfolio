@@ -143,6 +143,23 @@ h3 {
     color: var(--primary);
 }
 
+.nav-projects-item {
+    margin-left: 0.5rem;
+}
+
+.nav-projects-btn {
+    border: 1px solid var(--border-light) !important;
+    padding: 0.45rem 1.1rem !important;
+    color: var(--text-light) !important;
+    transition: var(--transition) !important;
+}
+
+.nav-projects-btn:hover {
+    border-color: var(--primary) !important;
+    color: var(--primary) !important;
+    background: rgba(29, 110, 241, 0.06);
+}
+
 /* Hero Section */
 .hero-section {
     min-height: 100vh;
