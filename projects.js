@@ -35,7 +35,7 @@ const PROJECTS = [
             './projects/jvfindings/screen3.png',
             './projects/jvfindings/screen4.png',
         ],
-        tags: ['Next.js 16', 'TypeScript', 'OpenAI API', 'Embeddings', 'RAWG API', 'Framer Motion', 'Docker', 'VPS'],
+        tags: ['Next.js 16', 'TypeScript', 'OpenAI API', 'text-embedding-3-small', 'Embeddings', 'RAWG API', 'Framer Motion', 'Docker', 'VPS'],
     },
 ];
 
