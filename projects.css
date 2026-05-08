@@ -8,6 +8,12 @@ a.logo {
     color: var(--primary) !important;
 }
 
+.nav-projects-active {
+    border-color: var(--primary) !important;
+    color: var(--primary) !important;
+    background: rgba(29, 110, 241, 0.08) !important;
+}
+
 /* ── Page hero ────────────────────────────────────────────── */
 .proj-page-hero {
     padding: 160px 0 5rem;
@@ -59,6 +65,12 @@ a.logo {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
+}
+
+/* Single card spans full width */
+.proj-card.proj-card-wide {
+    grid-column: 1 / -1;
+    grid-template-columns: 380px 1fr;
 }
 
 .proj-card {
@@ -190,22 +202,41 @@ a.logo {
     inset: 0;
     z-index: 2000;
     display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 4vh 3vw;
 }
 
 .proj-modal.active {
     display: flex;
 }
 
+.proj-modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(5, 5, 5, 0.88);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+}
+
 .proj-modal-inner {
+    position: relative;
+    z-index: 1;
     width: 100%;
+    max-width: 1400px;
     height: 100%;
     display: flex;
+    border: 1px solid var(--border-light);
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
     opacity: 0;
-    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: scale(0.96) translateY(16px);
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .proj-modal.active .proj-modal-inner {
     opacity: 1;
+    transform: scale(1) translateY(0);
 }
 
 /* Left: iframe */
