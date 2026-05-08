@@ -86,8 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Smooth scroll for nav links
-    const links = document.querySelectorAll('.nav-links a');
+    // Smooth scroll for anchor nav links only (skip page links like /projets)
+    const links = document.querySelectorAll('.nav-links a[href^="#"]');
     links.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
