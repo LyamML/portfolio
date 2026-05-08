@@ -9,8 +9,15 @@ const PROJECTS = [
         freelance: true,
         description: "SaaS d'audit de menu IA. Uploadez une photo de votre menu, obtenez un audit gratuit (score, erreurs, estimation des pertes de revenus), puis payez pour recevoir un plan de restructuration complet.",
         url: 'https://menucash.lyamml.fr',
-        thumbnail: null,
-        images: [],
+        thumbnail: './public/projects/menucash/thumb.png',
+        images: [
+            './public/projects/menucash/screen1.png',
+            './public/projects/menucash/screen2.png',
+            './public/projects/menucash/screen3.png',
+            './public/projects/menucash/screen4.png',
+            './public/projects/menucash/screen5.png',
+            './public/projects/menucash/screen6.png',
+        ],
         tags: ['Node.js', 'Express.js', 'GPT-4.1-mini', 'Stripe', 'Supabase', 'PostgreSQL', 'HTML/CSS/JS', 'Docker', 'Coolify', 'VPS'],
     },
 ];
