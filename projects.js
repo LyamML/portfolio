@@ -5,7 +5,7 @@ const PROJECTS = [
     {
         id: 'menucash',
         name: 'Menu Cash',
-        badge: 'MVP',
+        badges: ['MVP'],
         freelance: true,
         description: "SaaS d'audit de menu IA. Uploadez une photo de votre menu, obtenez un audit gratuit (score, erreurs, estimation des pertes de revenus), puis payez pour recevoir un plan de restructuration complet.",
         url: 'https://menucash.lyamml.fr',
@@ -18,24 +18,19 @@ const PROJECTS = [
             './projects/menucash/screen5.png',
             './projects/menucash/screen6.png',
         ],
-        tags: ['Node.js', 'Express.js', 'GPT-4.1-mini', 'Stripe', 'Supabase', 'PostgreSQL', 'HTML/CSS/JS', 'Docker', 'Coolify', 'VPS'],
+        tags: ['Node.js', 'Express.js', 'GPT-4.1-mini', 'Stripe', 'Supabase', 'PostgreSQL', 'HTML/CSS/JS', 'Docker', 'VPS'],
     },
     {
         id: 'jvfinder',
         name: 'JVFinder',
-        badge: null,
+        badges: ['POC', 'Entrainement'],
         freelance: false,
         description: "Développé après une certification OpenAI pour appliquer les embeddings vectoriels sur un cas concret. Chaque jeu est converti en vecteur sémantique via text-embedding-3-small et classé par similarité cosinus — avec un pool pré-filtré via RAWG pour des résultats pertinents.",
         descriptionDetail: "Développé après une certification OpenAI pour mettre en pratique les embeddings vectoriels sur un cas concret. L'algorithme convertit chaque jeu en vecteur sémantique (nom, genres, tags) via text-embedding-3-small, puis calcule une similarité cosinus pour retourner les titres les plus proches. Un pool de jusqu'à 100 candidats pré-filtrés par genres et tags via RAWG optimise la pertinence des résultats sans surcharger les appels API.\n\nDeux modes : Recherche (le meilleur match s'affiche en grand avec distribution des scores, tags dominants, médiane) et Comparaison directe entre deux jeux (genres/tags communs et uniques, label qualitatif de similarité). Un cache in-memory TTL 1h évite tout appel redondant. Interface animée avec Framer Motion, déployée en Docker sur Coolify.",
         url: 'https://jvfindings.lyamml.fr',
-        thumbnail: './projects/jvfindings/thumb.png',
-        images: [
-            './projects/jvfindings/screen1.png',
-            './projects/jvfindings/screen2.png',
-            './projects/jvfindings/screen3.png',
-            './projects/jvfindings/screen4.png',
-        ],
-        tags: ['Next.js 16', 'TypeScript', 'OpenAI API', 'RAWG API', 'Framer Motion', 'Docker', 'Coolify', 'VPS'],
+        thumbnail: null,
+        images: [],
+        tags: ['Next.js 16', 'TypeScript', 'OpenAI API', 'Embeddings', 'RAWG API', 'Framer Motion', 'Docker', 'VPS'],
     },
 ];
 
@@ -88,7 +83,7 @@ function renderCards() {
             <div class="proj-card-content">
                 <div>
                     <div class="proj-card-badges">
-                        ${proj.badge ? `<span class="proj-card-badge">${proj.badge}</span>` : ''}
+                        ${(proj.badges || []).map(b => `<span class="proj-card-badge">${b}</span>`).join('')}
                         ${proj.freelance ? `<span class="proj-card-badge proj-badge-freelance">FREELANCE</span>` : ''}
                     </div>
                     <h2 class="proj-card-title">${proj.name}</h2>
@@ -110,10 +105,10 @@ function renderCards() {
 // ── Modal open/close ──────────────────────────────────────────
 function openModal(proj) {
     detailBadge.innerHTML = [
-        proj.badge    ? `<span class="proj-details-badge">${proj.badge}</span>` : '',
+        ...(proj.badges || []).map(b => `<span class="proj-details-badge">${b}</span>`),
         proj.freelance ? `<span class="proj-details-badge proj-badge-freelance">FREELANCE</span>` : '',
     ].join('');
-    detailBadge.style.display = (proj.badge || proj.freelance) ? 'flex' : 'none';
+    detailBadge.style.display = ((proj.badges?.length) || proj.freelance) ? 'flex' : 'none';
     detailName.textContent  = proj.name;
     detailDesc.innerHTML = (proj.descriptionDetail || proj.description)
         .split('\n\n')
