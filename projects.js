@@ -27,7 +27,7 @@ const PROJECTS = [
         freelance: false,
         description: "Moteur de recommandation de jeux vidéo propulsé par IA. Trouvez les titres les plus similaires à un jeu donné, ou comparez deux jeux par similarité sémantique.",
         descriptionDetail: "JVFinder propose deux modes : Recherche et Comparaison. En mode Recherche, jusqu'à 100 jeux candidats sont filtrés via RAWG par genres et tags, puis chaque jeu est transformé en vecteur textuel via OpenAI (text-embedding-3-small). La similarité cosinus classe les résultats — le meilleur match s'affiche en grand avec ses stats (distribution des scores, tags dominants, médiane). En mode Comparaison, deux embeddings sont générés en un seul appel et confrontés directement, avec genres/tags communs et uniques. Un cache in-memory TTL 1h évite tout appel redondant. Interface animée avec Framer Motion, déployée en Docker sur Coolify.",
-        url: 'https://jvfinder.lyamml.fr',
+        url: 'https://jvfindings.lyamml.fr',
         thumbnail: null,
         images: [],
         tags: ['Next.js 16', 'TypeScript', 'OpenAI API', 'RAWG API', 'Framer Motion', 'Docker', 'Coolify', 'VPS'],
@@ -100,11 +100,6 @@ function renderCards() {
             setTimeout(() => card.classList.add('reveal-in'), i * 80);
         });
     });
-
-    // Single card → full width
-    if (PROJECTS.length === 1) {
-        grid.querySelector('.proj-card').classList.add('proj-card-wide');
-    }
 }
 
 // ── Modal open/close ──────────────────────────────────────────

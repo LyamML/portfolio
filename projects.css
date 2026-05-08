@@ -63,19 +63,13 @@ a.logo {
 /* ── Project cards grid ───────────────────────────────────── */
 .proj-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
     gap: 1.5rem;
-}
-
-/* Single card spans full width */
-.proj-card.proj-card-wide {
-    grid-column: 1 / -1;
-    grid-template-columns: 380px 1fr;
 }
 
 .proj-card {
     display: grid;
-    grid-template-columns: 260px 1fr;
+    grid-template-columns: 380px 1fr;
     border: 1px solid var(--border-light);
     background: rgba(255, 255, 255, 0.01);
     cursor: pointer;
@@ -598,10 +592,6 @@ a.logo {
 }
 
 @media (max-width: 992px) {
-    .proj-grid {
-        grid-template-columns: 1fr;
-    }
-
     .proj-card {
         grid-template-columns: 220px 1fr;
     }
