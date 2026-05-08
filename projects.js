@@ -141,27 +141,20 @@ function renderGallery() {
         img.addEventListener('click', () => openLightbox(img.dataset.src));
     });
 
-    setThumbWidths();
+    // Wait for images to have natural dimensions before computing positions
+    galleryTrack.querySelectorAll('.gallery-thumb').forEach(img => {
+        img.addEventListener('load', updateGalleryPos, { once: true });
+    });
+
     updateGalleryPos();
 }
 
-function setThumbWidths() {
-    const wrapper = galleryTrack.parentElement;
-    if (!wrapper || currentImages.length === 0) return;
-    const gap   = 6;
-    const count = Math.min(GALLERY_VISIBLE, currentImages.length);
-    const w     = (wrapper.offsetWidth - gap * (count - 1)) / count;
-    galleryTrack.querySelectorAll('.gallery-thumb').forEach(img => {
-        img.style.width = `${w}px`;
-    });
-}
-
 function updateGalleryPos() {
-    const wrapper = galleryTrack.parentElement;
-    if (!wrapper || currentImages.length === 0) return;
-    const gap   = 6;
-    const count = Math.min(GALLERY_VISIBLE, currentImages.length);
-    const w     = (wrapper.offsetWidth - gap * (count - 1)) / count;
+    const firstImg = galleryTrack.querySelector('.gallery-thumb');
+    if (!firstImg) return;
+    const gap = 6;
+    const w   = firstImg.offsetWidth;
+    if (!w) return;
     galleryTrack.style.transform = `translateX(${-galleryOffset * (w + gap)}px)`;
 
     galleryPrev.disabled = galleryOffset === 0;
