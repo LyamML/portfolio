@@ -6,6 +6,7 @@ const PROJECTS = [
         id: 'menucash',
         name: 'Menu Cash',
         badge: 'MVP',
+        freelance: true,
         description: "SaaS d'audit de menu IA. Uploadez une photo de votre menu, obtenez un audit gratuit (score, erreurs, estimation des pertes de revenus), puis payez pour recevoir un plan de restructuration complet.",
         url: 'https://menucash.lyamml.fr',
         thumbnail: null,
@@ -59,7 +60,10 @@ function renderCards() {
             <div class="proj-thumb">${thumbHtml}</div>
             <div class="proj-card-content">
                 <div>
-                    ${proj.badge ? `<span class="proj-card-badge">${proj.badge}</span>` : ''}
+                    <div class="proj-card-badges">
+                        ${proj.badge ? `<span class="proj-card-badge">${proj.badge}</span>` : ''}
+                        ${proj.freelance ? `<span class="proj-card-badge proj-badge-freelance">FREELANCE</span>` : ''}
+                    </div>
                     <h2 class="proj-card-title">${proj.name}</h2>
                     <p class="proj-card-desc">${proj.description}</p>
                 </div>
@@ -83,8 +87,11 @@ function renderCards() {
 
 // ── Modal open/close ──────────────────────────────────────────
 function openModal(proj) {
-    detailBadge.textContent = proj.badge || '';
-    detailBadge.style.display = proj.badge ? 'inline-block' : 'none';
+    detailBadge.innerHTML = [
+        proj.badge    ? `<span class="proj-details-badge">${proj.badge}</span>` : '',
+        proj.freelance ? `<span class="proj-details-badge proj-badge-freelance">FREELANCE</span>` : '',
+    ].join('');
+    detailBadge.style.display = (proj.badge || proj.freelance) ? 'flex' : 'none';
     detailName.textContent  = proj.name;
     detailDesc.textContent  = proj.description;
     detailLink.href         = proj.url;
