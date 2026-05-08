@@ -47,6 +47,9 @@ const lightbox     = document.getElementById('img-lightbox');
 const lightboxImg  = document.getElementById('lightbox-img');
 const lightboxOvl  = document.getElementById('lightbox-overlay');
 const lightboxX    = document.getElementById('lightbox-close');
+const lightboxPrev = document.getElementById('lightbox-prev');
+const lightboxNext = document.getElementById('lightbox-next');
+let   lightboxIdx  = 0;
 
 // ── Render cards ──────────────────────────────────────────────
 function renderCards() {
@@ -163,8 +166,22 @@ function updateGalleryPos() {
 
 // ── Lightbox ──────────────────────────────────────────────────
 function openLightbox(src) {
-    lightboxImg.src = src;
+    lightboxIdx = currentImages.indexOf(src);
+    updateLightboxImage();
     lightbox.classList.add('active');
+}
+
+function updateLightboxImage() {
+    lightboxImg.src = currentImages[lightboxIdx];
+    lightboxPrev.disabled = lightboxIdx === 0;
+    lightboxNext.disabled = lightboxIdx === currentImages.length - 1;
+}
+
+function lightboxNavigate(dir) {
+    const next = lightboxIdx + dir;
+    if (next < 0 || next >= currentImages.length) return;
+    lightboxIdx = next;
+    updateLightboxImage();
 }
 
 function closeLightbox() {
@@ -188,11 +205,16 @@ galleryNext.addEventListener('click', () => {
 
 lightboxOvl.addEventListener('click', closeLightbox);
 lightboxX.addEventListener('click', closeLightbox);
+lightboxPrev.addEventListener('click', () => lightboxNavigate(-1));
+lightboxNext.addEventListener('click', () => lightboxNavigate(1));
 
 window.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-        if (lightbox.classList.contains('active')) closeLightbox();
-        else if (modal.classList.contains('active')) closeModal();
+    if (lightbox.classList.contains('active')) {
+        if (e.key === 'Escape')       closeLightbox();
+        else if (e.key === 'ArrowLeft')  lightboxNavigate(-1);
+        else if (e.key === 'ArrowRight') lightboxNavigate(1);
+    } else if (modal.classList.contains('active')) {
+        if (e.key === 'Escape') closeModal();
     }
 });
 

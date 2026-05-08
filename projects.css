@@ -296,7 +296,7 @@ a.logo {
 
 /* Right: details */
 .proj-details-pane {
-    width: 400px;
+    width: 460px;
     flex-shrink: 0;
     background: var(--bg-dark);
     display: flex;
@@ -476,7 +476,7 @@ a.logo {
 
 .gallery-thumb {
     flex-shrink: 0;
-    height: 72px;
+    height: 108px;
     width: auto;
     object-fit: cover;
     border: 1px solid var(--border-light);
@@ -549,10 +549,51 @@ a.logo {
     transform: rotate(90deg);
 }
 
+.lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 2.4rem;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+    line-height: 1;
+    padding: 0;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    backdrop-filter: blur(4px);
+}
+
+.lightbox-nav:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.35);
+    color: #fff;
+}
+
+.lightbox-nav:disabled {
+    opacity: 0.2;
+    cursor: default;
+}
+
+.lightbox-prev { left: 2rem; }
+.lightbox-next { right: 2rem; }
+
 /* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 1200px) {
+    .proj-details-pane {
+        width: 400px;
+    }
+}
+
 @media (max-width: 1100px) {
     .proj-details-pane {
-        width: 340px;
+        width: 360px;
     }
 }
 
