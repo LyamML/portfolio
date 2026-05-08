@@ -25,8 +25,8 @@ const PROJECTS = [
         name: 'JVFinder',
         badge: null,
         freelance: false,
-        description: "Moteur de recommandation de jeux vidéo propulsé par IA. Trouvez les titres les plus similaires à un jeu donné, ou comparez deux jeux par similarité sémantique.",
-        descriptionDetail: "JVFinder propose deux modes : Recherche et Comparaison. En mode Recherche, jusqu'à 100 jeux candidats sont filtrés via RAWG par genres et tags, puis chaque jeu est transformé en vecteur textuel via OpenAI (text-embedding-3-small). La similarité cosinus classe les résultats — le meilleur match s'affiche en grand avec ses stats (distribution des scores, tags dominants, médiane). En mode Comparaison, deux embeddings sont générés en un seul appel et confrontés directement, avec genres/tags communs et uniques. Un cache in-memory TTL 1h évite tout appel redondant. Interface animée avec Framer Motion, déployée en Docker sur Coolify.",
+        description: "Développé après une certification OpenAI pour appliquer les embeddings vectoriels sur un cas concret. Chaque jeu est converti en vecteur sémantique via text-embedding-3-small et classé par similarité cosinus — avec un pool pré-filtré via RAWG pour des résultats pertinents.",
+        descriptionDetail: "Développé après une certification OpenAI pour mettre en pratique les embeddings vectoriels sur un cas concret. L'algorithme convertit chaque jeu en vecteur sémantique (nom, genres, tags) via text-embedding-3-small, puis calcule une similarité cosinus pour retourner les titres les plus proches. Un pool de jusqu'à 100 candidats pré-filtrés par genres et tags via RAWG optimise la pertinence des résultats sans surcharger les appels API.\n\nDeux modes : Recherche (le meilleur match s'affiche en grand avec distribution des scores, tags dominants, médiane) et Comparaison directe entre deux jeux (genres/tags communs et uniques, label qualitatif de similarité). Un cache in-memory TTL 1h évite tout appel redondant. Interface animée avec Framer Motion, déployée en Docker sur Coolify.",
         url: 'https://jvfindings.lyamml.fr',
         thumbnail: './projects/jvfindings/thumb.png',
         images: [
@@ -115,7 +115,10 @@ function openModal(proj) {
     ].join('');
     detailBadge.style.display = (proj.badge || proj.freelance) ? 'flex' : 'none';
     detailName.textContent  = proj.name;
-    detailDesc.textContent  = proj.descriptionDetail || proj.description;
+    detailDesc.innerHTML = (proj.descriptionDetail || proj.description)
+        .split('\n\n')
+        .map(p => `<p>${p}</p>`)
+        .join('');
     detailLink.href         = proj.url;
 
     detailTags.innerHTML = proj.tags.map(t => `<span class="tag-box">${t}</span>`).join('');
