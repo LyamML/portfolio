@@ -21,6 +21,7 @@ let currentImages = [];
 
 // ── DOM refs ──────────────────────────────────────────────────
 const grid         = document.getElementById('projects-grid');
+const modalOverlay = document.getElementById('proj-modal-overlay');
 const modal        = document.getElementById('proj-modal');
 const iframe       = document.getElementById('proj-iframe');
 const iframeLoader = document.getElementById('iframe-loading');
@@ -73,6 +74,11 @@ function renderCards() {
             setTimeout(() => card.classList.add('reveal-in'), i * 80);
         });
     });
+
+    // Single card → full width
+    if (PROJECTS.length === 1) {
+        grid.querySelector('.proj-card').classList.add('proj-card-wide');
+    }
 }
 
 // ── Modal open/close ──────────────────────────────────────────
@@ -161,6 +167,7 @@ function closeLightbox() {
 
 // ── Event bindings ────────────────────────────────────────────
 modalClose.addEventListener('click', closeModal);
+modalOverlay.addEventListener('click', closeModal);
 
 galleryPrev.addEventListener('click', () => {
     galleryOffset = Math.max(0, galleryOffset - 1);
