@@ -22,7 +22,7 @@ const PROJECTS = [
     },
     {
         id: 'jvfinder',
-        name: 'JVFinder',
+        name: 'JVFindings',
         badges: ['POC', 'Entrainement'],
         freelance: false,
         description: "Développé après une certification OpenAI pour appliquer les embeddings vectoriels sur un cas concret. Chaque jeu est converti en vecteur sémantique via text-embedding-3-small et classé par similarité cosinus — avec un pool pré-filtré via RAWG pour des résultats pertinents.",
