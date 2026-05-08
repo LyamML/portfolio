@@ -177,6 +177,18 @@ a.logo {
     border-color: rgba(252, 87, 87, 0.3) !important;
 }
 
+.proj-badge-poc {
+    color: #38BDF8 !important;
+    background: rgba(56, 189, 248, 0.1) !important;
+    border-color: rgba(56, 189, 248, 0.3) !important;
+}
+
+.proj-badge-training {
+    color: #A78BFA !important;
+    background: rgba(167, 139, 250, 0.1) !important;
+    border-color: rgba(167, 139, 250, 0.3) !important;
+}
+
 .proj-card-title {
     font-size: 1.9rem;
     font-weight: 800;

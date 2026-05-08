@@ -28,8 +28,13 @@ const PROJECTS = [
         description: "Développé après une certification OpenAI pour appliquer les embeddings vectoriels sur un cas concret. Chaque jeu est converti en vecteur sémantique via text-embedding-3-small et classé par similarité cosinus — avec un pool pré-filtré via RAWG pour des résultats pertinents.",
         descriptionDetail: "Développé après une certification OpenAI pour mettre en pratique les embeddings vectoriels sur un cas concret. L'algorithme convertit chaque jeu en vecteur sémantique (nom, genres, tags) via text-embedding-3-small, puis calcule une similarité cosinus pour retourner les titres les plus proches. Un pool de jusqu'à 100 candidats pré-filtrés par genres et tags via RAWG optimise la pertinence des résultats sans surcharger les appels API.\n\nDeux modes : Recherche (le meilleur match s'affiche en grand avec distribution des scores, tags dominants, médiane) et Comparaison directe entre deux jeux (genres/tags communs et uniques, label qualitatif de similarité). Un cache in-memory TTL 1h évite tout appel redondant. Interface animée avec Framer Motion, déployée en Docker sur Coolify.",
         url: 'https://jvfindings.lyamml.fr',
-        thumbnail: null,
-        images: [],
+        thumbnail: './projects/jvfindings/thumb.png',
+        images: [
+            './projects/jvfindings/screen1.png',
+            './projects/jvfindings/screen2.png',
+            './projects/jvfindings/screen3.png',
+            './projects/jvfindings/screen4.png',
+        ],
         tags: ['Next.js 16', 'TypeScript', 'OpenAI API', 'Embeddings', 'RAWG API', 'Framer Motion', 'Docker', 'VPS'],
     },
 ];
@@ -63,6 +68,14 @@ const lightboxPrev = document.getElementById('lightbox-prev');
 const lightboxNext = document.getElementById('lightbox-next');
 let   lightboxIdx  = 0;
 
+// ── Badge class map ───────────────────────────────────────────
+const BADGE_CLASSES = {
+    'POC':          'proj-badge-poc',
+    'Entrainement': 'proj-badge-training',
+    'FREELANCE':    'proj-badge-freelance',
+};
+function badgeClass(label) { return BADGE_CLASSES[label] || ''; }
+
 // ── Render cards ──────────────────────────────────────────────
 function renderCards() {
     PROJECTS.forEach((proj, i) => {
@@ -83,7 +96,7 @@ function renderCards() {
             <div class="proj-card-content">
                 <div>
                     <div class="proj-card-badges">
-                        ${(proj.badges || []).map(b => `<span class="proj-card-badge">${b}</span>`).join('')}
+                        ${(proj.badges || []).map(b => `<span class="proj-card-badge ${badgeClass(b)}">${b}</span>`).join('')}
                         ${proj.freelance ? `<span class="proj-card-badge proj-badge-freelance">FREELANCE</span>` : ''}
                     </div>
                     <h2 class="proj-card-title">${proj.name}</h2>
@@ -105,7 +118,7 @@ function renderCards() {
 // ── Modal open/close ──────────────────────────────────────────
 function openModal(proj) {
     detailBadge.innerHTML = [
-        ...(proj.badges || []).map(b => `<span class="proj-details-badge">${b}</span>`),
+        ...(proj.badges || []).map(b => `<span class="proj-details-badge ${badgeClass(b)}">${b}</span>`),
         proj.freelance ? `<span class="proj-details-badge proj-badge-freelance">FREELANCE</span>` : '',
     ].join('');
     detailBadge.style.display = ((proj.badges?.length) || proj.freelance) ? 'flex' : 'none';
