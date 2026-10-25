@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Caveat:wght@600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>try { if (localStorage.getItem('lml-theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch {}</script>
 <style>
 :root{
     --board:#f3f2ee; --dot:#d6d3cb; --card:#ffffff; --ink:#1d1d1b; --soft-ink:#45433e; --muted:#77746c; --line:#e7e5df; --chip:#f2f1ed; --chip-h:#e8e6e0;
@@ -167,18 +168,13 @@ h2{font:700 26px/1.1 var(--sans);letter-spacing:-.03em;margin-bottom:14px}
 .tools .sep{width:1px;height:20px;background:var(--line);margin:0 4px}
 .minimap{bottom:64px;right:14px;width:210px;height:140px;cursor:pointer;overflow:hidden}
 
-/* Start card */
-.start{inset:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:120px;pointer-events:none;transition:opacity .4s}
-.start.gone{opacity:0}
-.start .card{pointer-events:auto;padding:22px 24px;width:min(560px,calc(100vw - 28px));text-align:center}
-.start h3{font:800 22px var(--sans);letter-spacing:-.02em}
-.start p{color:var(--muted);margin:4px 0 16px}
-.start .choices{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.start .choices button{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:12px 10px;cursor:pointer;font:600 14px var(--sans);display:flex;flex-direction:column;gap:4px;align-items:center}
-.start .choices button span{font:400 12px var(--sans);color:var(--muted)}
-.start .choices button:hover{border-color:var(--sel)}
-.start .choices button.main{background:var(--lyam);color:#fff;border-color:var(--lyam)}
-.start .choices button.main span{color:rgba(255,255,255,.8)}
+/* Loading screen (until fonts + thumbnails are ready) */
+.loader{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:var(--board);transition:opacity .45s}
+.loader.gone{opacity:0;pointer-events:none}
+.loader b{font:800 28px/1 var(--sans);letter-spacing:-.03em}
+.loader .lbar{width:min(260px,70vw);height:4px;border-radius:2px;background:var(--chip);overflow:hidden}
+.loader .lbar i{display:block;height:100%;width:0;background:var(--lyam);transition:width .25s}
+.loader span{font:500 12px var(--mono);color:var(--muted)}
 
 
 /* Search palette */
@@ -211,7 +207,6 @@ h2{font:700 26px/1.1 var(--sans);letter-spacing:-.03em;margin-bottom:14px}
     .minimap,.top-left .lbl-full,.icon-btn kbd{display:none}
     .nav{top:58px}
     .tools{bottom:60px}
-    .start .choices{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -232,13 +227,7 @@ h2{font:700 26px/1.1 var(--sans);letter-spacing:-.03em;margin-bottom:14px}
 </div>
 <canvas class="ui panel-ui minimap" id="mini" width="420" height="280"></canvas>
 
-<div class="ui start" id="start"><div class="card panel-ui">
-    <h3>Comment voulez-vous découvrir mon profil ?</h3><p>Glisser pour se déplacer · molette ou pincer pour zoomer · <b>Ctrl+K</b> pour chercher</p>
-    <div class="choices">
-        <button class="main" data-start="explore">⤢ Explorer<span>librement sur le tableau</span></button>
-        <button data-start="list">☰ Liste<span>lecture classique</span></button>
-    </div>
-</div></div>
+<div class="loader" id="loader" role="status" aria-live="polite"><b>Lyam Mafray-Lizé</b><div class="lbar"><i id="load-bar"></i></div><span>Chargement du tableau…</span></div>
 
 <div class="ui palette" id="palette"><div class="box panel-ui"><input id="pal-in" placeholder="Chercher une techno, un projet, une école… (ex. Docker, Kaggle)" autocomplete="off"><div class="res" id="pal-res"></div></div></div>
 <div class="ui reader" id="reader"><div class="in" id="reader-in"></div></div>
@@ -441,7 +430,7 @@ function moveCursor(x, y, chat = '') {
 // ── Pan / pinch / wheel ───────────────────────────────────────
 const pointers = new Map();
 let last = null, pinch = null, moved = 0;
-function userMoved() { cancelAnimationFrame(anim); dismissStart(); }
+function userMoved() { cancelAnimationFrame(anim); }
 vp.addEventListener('pointerdown', e => {
     moved = 0; // a fresh press is a click until it actually drags
     if (e.target.closest('a,button,select,iframe') && e.pointerType === 'mouse') return;
@@ -528,7 +517,7 @@ function palRender() {
     $('pal-res').innerHTML = palList.length ? palList.map((it, i) => `<button class="${i === palIdx ? 'on' : ''}" data-i="${i}">${esc(it.text)}<span>${esc(it.kind)}</span></button>`).join('')
         : `<div class="empty">Aucun résultat pour « ${esc($('pal-in').value)} ».</div>`;
 }
-function palOpen() { dismissStart(); $('palette').classList.add('on'); $('pal-in').value = ''; palIdx = 0; palRender(); $('pal-in').focus(); }
+function palOpen() { $('palette').classList.add('on'); $('pal-in').value = ''; palIdx = 0; palRender(); $('pal-in').focus(); }
 const palClose = () => $('palette').classList.remove('on');
 function palGo(it) {
     palClose();
@@ -549,7 +538,6 @@ $('palette').addEventListener('click', e => { if (e.target === $('palette')) pal
 
 // ── Reader (list mode) ────────────────────────────────────────
 function openReader() {
-    dismissStart();
     const clean = el => { const c = el.cloneNode(true); c.removeAttribute('id'); c.querySelectorAll('.cover,.corner,.size').forEach(n => n.remove()); return c.outerHTML; };
     $('reader-in').innerHTML = ZONES.map(z => `<h2 class="zone-h" style="color:${z.color}">${esc(z.title)}</h2>` +
         FRAMES.filter(f => f.zone === z.id).map(f => clean($('f-' + f.id))).join('') +
@@ -572,16 +560,10 @@ document.addEventListener('click', e => {
     layout();
 });
 
-// ── Start card, nav, theme, keys ─────────────────────────────
-function dismissStart() { const s = $('start'); if (s && !s.classList.contains('gone')) { s.classList.add('gone'); setTimeout(() => s.remove(), 400); } }
-$('start').addEventListener('click', e => {
-    const b = e.target.closest('[data-start]'); if (!b) return;
-    const k = b.dataset.start;
-    if (k === 'list') openReader(); else { dismissStart(); focusFrame('hero'); }
-});
+// ── Nav, theme, keys ─────────────────────────────────────────
 const NAV = [['hero', 'Intro'], ['recherche', 'Recherche'], ['zone:projets', 'Projets'], ['skills', 'Compétences'], ['soft', 'Soft skills'], ['parcours', 'Parcours'], ['certs', 'Certifs'], ['langues', 'Langues'], ['contact', 'Contact']];
 $('nav').innerHTML = NAV.map(([id, l]) => `<button data-go="${id}">${l}</button>`).join('');
-$('nav').addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) { dismissStart(); focusFrame(b.dataset.go); } });
+$('nav').addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) focusFrame(b.dataset.go); });
 $('zin').onclick = () => { userMoved(); zoomAt(1.25, innerWidth / 2, innerHeight / 2); };
 $('zout').onclick = () => { userMoved(); zoomAt(.8, innerWidth / 2, innerHeight / 2); };
 $('fit').onclick = () => { userMoved(); frameEls.forEach(f => f.classList.remove('active')); flyTo(bounds(), { pad: 40 }); };
@@ -600,7 +582,7 @@ addEventListener('keydown', e => {
     else if (e.key === '+' || e.key === '=') $('zin').click();
     else if (e.key === '-') $('zout').click();
     else if (e.key === '0') $('fit').click();
-    else if (/^[1-9]$/.test(e.key) && NAV[+e.key - 1]) { dismissStart(); focusFrame(NAV[+e.key - 1][0]); }
+    else if (/^[1-9]$/.test(e.key) && NAV[+e.key - 1]) focusFrame(NAV[+e.key - 1][0]);
 });
 const lb = $('lb');
 world.addEventListener('click', e => { const z = e.target.closest('[data-zoom]'); if (z && moved < 6) { lb.querySelector('img').src = z.dataset.zoom; lb.classList.add('on'); } });
@@ -613,7 +595,20 @@ cam = { z: z0, x: innerWidth / 2 - (all.x + all.w / 2) * z0, y: (innerHeight - 1
 apply();
 moveCursor(...cursorRest());
 const deep = location.hash.slice(1);
-if (deep && (byId[deep] || deep === 'soft' || ZONES.some(z => z.id === deep))) { dismissStart(); setTimeout(() => focusFrame(byId[deep] || deep === 'soft' ? deep : 'zone:' + deep), 300); }
+const first = deep && (byId[deep] || deep === 'soft') ? deep : ZONES.some(z => z.id === deep) ? 'zone:' + deep : 'hero';
+
+// Loading screen: wait for fonts and board images, capped so a slow network never blocks the page.
+const pending = [...world.querySelectorAll('img')].filter(i => !i.complete);
+const total = pending.length + 1;
+let done = 0;
+const tick = () => { done++; $('load-bar').style.width = Math.round(done / total * 100) + '%'; };
+const ready = Promise.all([document.fonts.ready.then(tick), ...pending.map(i => new Promise(r => { i.addEventListener('load', r, { once: true }); i.addEventListener('error', r, { once: true }); }).then(tick))]);
+Promise.race([ready, new Promise(r => setTimeout(r, 8000))]).then(() => {
+    layout(); apply();
+    $('loader').classList.add('gone');
+    setTimeout(() => $('loader').remove(), 500);
+    setTimeout(() => focusFrame(first, { dur: 1400 }), 700);
+});
 </script>
 </body>
 </html>
