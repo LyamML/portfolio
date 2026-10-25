@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lyam Mafray-Lizé — Développeur Fullstack & IA</title>
+<meta name="description" content="Lyam Mafray-Lizé, développeur Fullstack & IA. Alternance Mastère IA & Data 2027, EPSI Rennes.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wdth,wght@8..144,25..151,100..1000&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+<style>
+:root{ --bg:#eeede8; --ink:#111; --muted:#6f6d66; --line:#d6d4cc; --blue:#2639ff; --flex:'Roboto Flex',system-ui,sans-serif; --mono:'JetBrains Mono',monospace; }
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.5 var(--flex);font-variation-settings:'wdth' 100;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+@media (hover:hover){ body,a,button{cursor:none} }
+a{color:inherit}
+.mono{font:500 12px/1.5 var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.wrap{padding:0 4vw}
+
+/* Cursor */
+.cursor{position:fixed;left:0;top:0;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;background:#fff;mix-blend-mode:difference;pointer-events:none;z-index:100;transition:width .25s,height .25s,margin .25s}
+.cursor.big{width:70px;height:70px;margin:-35px 0 0 -35px}
+@media (hover:none){ .cursor{display:none} }
+
+/* Top bar */
+.top{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:18px 4vw;mix-blend-mode:difference;color:#fff}
+.top a{text-decoration:none;font:600 13px var(--mono);text-transform:uppercase;letter-spacing:.05em}
+.top nav{display:flex;gap:22px}
+
+/* Hero — kinetic variable type */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:120px 4vw 5vh;position:relative}
+.kin{display:block;font-family:var(--flex);line-height:.8;letter-spacing:-.02em;white-space:nowrap;user-select:none}
+.kin span{display:inline-block;font-variation-settings:'wght' 300,'wdth' 60;transition:font-variation-settings .12s linear,color .2s}
+.hero .kin{font-size:clamp(64px,15.5vw,260px)}
+.hero .kin span.a{color:var(--blue)}
+.hero-meta{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:4vw;margin-top:5vh;border-top:2px solid var(--ink);padding-top:18px}
+.hero-meta p{font-size:clamp(17px,1.5vw,21px);font-variation-settings:'wght' 420}
+.hero-meta b{font-variation-settings:'wght' 700}
+.live{display:inline-flex;gap:8px;align-items:center}
+.live::before{content:'';width:10px;height:10px;border-radius:50%;background:var(--blue);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.25}}
+.links{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:10px}
+.links a{font:600 14px var(--mono);text-decoration:none;border-bottom:2px solid var(--ink);padding-bottom:1px}
+.links a:hover{color:var(--blue);border-color:var(--blue)}
+
+/* Section headings */
+.sec{padding:16vh 4vw 6vh}
+.sec-h{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:40px}
+.sec-h h2{font-size:clamp(46px,8vw,128px);line-height:.85;letter-spacing:-.03em;font-variation-settings:'wght' 800,'wdth' 70}
+
+/* Search */
+.search{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-left:2px solid var(--ink)}
+.search > div{border-right:2px solid var(--ink);padding:6px 18px 18px}
+.search b{display:block;font-size:clamp(22px,2.4vw,34px);line-height:1.05;font-variation-settings:'wght' 700,'wdth' 80;margin-top:8px}
+.search .missions{grid-column:1/-1;border-top:2px solid var(--ink);padding-top:16px;display:flex;flex-wrap:wrap;gap:8px}
+.pill{display:inline-block;border:2px solid var(--ink);border-radius:999px;padding:4px 14px;font:500 14px var(--mono)}
+
+/* Physics playground */
+.play-ui{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.play-ui button{font:600 13px var(--mono);border:2px solid var(--ink);background:none;border-radius:999px;padding:6px 14px;transition:background .15s,color .15s}
+.play-ui button:hover,.play-ui button.on{background:var(--ink);color:var(--bg)}
+.pit{position:relative;height:72vh;min-height:460px;border:2px solid var(--ink);border-radius:18px;overflow:hidden;background:repeating-linear-gradient(90deg,transparent 0 79px,rgba(0,0,0,.04) 79px 80px)}
+.pit .ghost{position:absolute;inset:0;display:grid;place-items:center;font-size:clamp(60px,12vw,200px);line-height:.85;text-align:center;color:rgba(0,0,0,.05);font-variation-settings:'wght' 900,'wdth' 40;pointer-events:none}
+.body-pill{position:absolute;left:0;top:0;visibility:hidden;padding:10px 20px;border-radius:999px;font:600 17px var(--flex);font-variation-settings:'wght' 650;white-space:nowrap;border:2px solid var(--ink);background:#fff;user-select:none;will-change:transform}
+.body-pill.c0{background:#2639ff;color:#fff;border-color:#2639ff}
+.body-pill.c1{background:#111;color:#eeede8}
+.body-pill.c2{background:#ffd23f}
+.body-pill.c3{background:#ff6b4a}
+.body-pill.c4{background:#b9f2d0}
+.body-pill.c5{background:#fff}
+.body-pill.dim{opacity:.18}
+.skill-list{display:grid;grid-template-columns:repeat(3,1fr);gap:20px 4vw;margin-top:26px}
+.skill-list h4{font-size:18px;font-variation-settings:'wght' 750;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.skill-list h4 i{width:12px;height:12px;border-radius:50%;border:2px solid var(--ink)}
+.skill-list p{color:#3a3934;font-size:15px}
+
+/* Soft skills — huge words */
+.soft{border-top:2px solid var(--ink)}
+.soft-row{display:grid;grid-template-columns:minmax(0,1.2fr) 1fr;gap:4vw;align-items:baseline;border-bottom:2px solid var(--ink);padding:10px 0}
+.soft-row .kin{font-size:clamp(44px,7.5vw,120px)}
+.soft-row p{font-size:16px;color:#3a3934}
+
+/* Projects — horizontal pinned scroll */
+.hscroll{position:relative}
+.hscroll .sticky{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;align-items:center}
+.track{display:flex;gap:4vw;padding:0 4vw;will-change:transform}
+.panel{flex:none;width:min(78vw,1100px);height:78vh;border:2px solid var(--ink);border-radius:18px;background:#fff;display:grid;grid-template-columns:1.25fr 1fr;overflow:hidden}
+.panel.intro{width:min(50vw,640px);background:var(--ink);color:var(--bg);display:flex;flex-direction:column;justify-content:space-between;padding:4vh 3vw}
+.panel.intro h2{font-size:clamp(56px,8vw,140px);line-height:.85;font-variation-settings:'wght' 900,'wdth' 60}
+.panel .shots{position:relative;background:#f4f3ef;border-right:2px solid var(--ink)}
+.panel .shots img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;opacity:0;transition:opacity .6s}
+.panel .shots img.on{opacity:1}
+.panel .txt{padding:3.5vh 2.5vw;display:flex;flex-direction:column;gap:12px;overflow-y:auto}
+.panel h3{font-size:clamp(40px,4.6vw,76px);line-height:.85;font-variation-settings:'wght' 900,'wdth' 70}
+.panel p{font-size:15.5px;color:#3a3934}
+.panel ul{list-style:none;font-size:14.5px}
+.panel li{padding:4px 0;border-top:1px solid var(--line)}
+.panel .go{align-self:flex-start;margin-top:auto;font:600 14px var(--mono);text-decoration:none;background:var(--blue);color:#fff;padding:10px 18px;border-radius:999px}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font:500 12px var(--mono);border:1.5px solid var(--ink);border-radius:999px;padding:2px 9px}
+
+/* Path rows */
+.row{display:grid;grid-template-columns:200px minmax(0,1fr) minmax(0,1fr);gap:3vw;padding:22px 0;border-bottom:2px solid var(--ink);align-items:start;transition:background .2s,padding .2s}
+.row:hover{background:#fff;padding-left:14px}
+.row h3{font-size:clamp(24px,2.6vw,38px);line-height:1;font-variation-settings:'wght' 750,'wdth' 80}
+.row .scr{font:500 13px var(--mono);color:var(--muted)}
+.row ul{list-style:none;font-size:15px;color:#3a3934}
+.row li::before{content:'→ ';color:var(--blue)}
+.badge{font:600 11px var(--mono);background:var(--blue);color:#fff;padding:2px 8px;border-radius:999px;margin-left:8px;vertical-align:4px}
+.sub-h{font-size:clamp(28px,3.4vw,48px);font-variation-settings:'wght' 800,'wdth' 75;margin:60px 0 8px}
+
+/* Certs & langs */
+.certs{display:grid;grid-template-columns:repeat(4,1fr);border-top:2px solid var(--ink);border-left:2px solid var(--ink)}
+.certs button{border:0;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);background:none;text-align:left;padding:18px;min-height:150px;display:flex;flex-direction:column;justify-content:space-between;font:inherit;font-size:22px;line-height:1.05;font-variation-settings:'wght' 700,'wdth' 80;transition:background .15s,color .15s}
+.certs button:hover{background:var(--blue);color:#fff}
+.certs button span{font:500 12px var(--mono)}
+.langs{display:grid;grid-template-columns:repeat(3,1fr);gap:4vw;margin-top:60px}
+.langs b{font-size:clamp(34px,4vw,60px);line-height:1;font-variation-settings:'wght' 850,'wdth' 70;display:block}
+.bar{height:10px;border:2px solid var(--ink);border-radius:999px;margin:12px 0 6px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ink)}
+
+/* Contact */
+.contact{padding:18vh 4vw 16vh;background:var(--ink);color:var(--bg)}
+.contact .kin{font-size:clamp(36px,7.6vw,140px);color:var(--bg)}
+.contact a.mail{text-decoration:none;display:block}
+.contact .links a{border-color:var(--bg)}
+.contact .links a:hover{color:#8e9bff;border-color:#8e9bff}
+
+@media (max-width:860px){
+    .top nav{display:none}
+    .hero-meta,.search,.skill-list,.langs{grid-template-columns:1fr}
+    .search > div{border-right:0;border-bottom:2px solid var(--ink)}
+    .certs{grid-template-columns:1fr 1fr}
+    .row{grid-template-columns:1fr;gap:6px}
+    .soft-row{grid-template-columns:1fr}
+    .panel{grid-template-columns:1fr;grid-template-rows:40% 60%;width:86vw}
+    .panel .shots{border-right:0;border-bottom:2px solid var(--ink)}
+    .panel.intro{width:70vw}
+}
+/* Scroll progress */
+.progress{position:fixed;top:0;left:0;height:3px;width:100%;background:var(--blue);transform-origin:0 50%;transform:scaleX(0);z-index:30}
+
+/* Intro: hero letters rise in one by one */
+.hero .kin span{animation:rise .9s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--i) * 45ms + 150ms)}
+@keyframes rise{from{transform:translateY(60%);opacity:0}}
+
+/* Freelance services */
+.svc{display:grid;grid-template-columns:repeat(3,1fr);border-top:2px solid var(--ink);border-left:2px solid var(--ink)}
+.svc > div{border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:22px 22px 26px;display:flex;flex-direction:column;gap:12px;transition:background .2s,color .2s}
+.svc > div:hover{background:var(--ink);color:var(--bg)}
+.svc > div:hover .tag{border-color:var(--bg)}
+.svc .n{font:500 12px var(--mono)}
+.svc h3{font-size:clamp(28px,3vw,44px);line-height:.9;font-variation-settings:'wght' 850,'wdth' 70}
+.svc p{font-size:15px;opacity:.85}
+
+/* Soft-skill rows lean with scroll speed */
+.soft{transform:skewY(var(--skew,0deg));transition:transform .25s ease-out}
+
+/* Magnetic links */
+.mag{display:inline-block;transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+
+@media (max-width:860px){ .svc{grid-template-columns:1fr} }
+@media (prefers-reduced-motion:reduce){ .kin span{transition:none;animation:none} .soft{transform:none} }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<header class="top"><a href="#top">Lyam M-L</a><nav><a href="#skills">Skills</a><a href="#freelance">Freelance</a><a href="#projets">Projets</a><a href="#parcours">Parcours</a><a href="#certifs">Certifs</a><a href="#contact">Contact</a></nav></header>
+<main id="main"></main>
+
+<script type="module">
+import { PROFILE, SEARCH, EXPERIENCES, EDUCATION, SKILLS, SOFT_SKILLS, LANGUAGES, CERTIFICATIONS, PROJECTS, SERVICES, SITES, fullName, monthsUntilStart, monthsOfExperience } from '/data.js';
+import '/lab/cert-viewer.js';
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const kin = (text, cls = '') => `<span class="kin ${cls}">${[...text].map(ch => ch === ' ' ? '<span>&nbsp;</span>' : `<span>${esc(ch)}</span>`).join('')}</span>`;
+const tags = a => `<div class="tags">${a.map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>`;
+const cur = EDUCATION.find(e => e.current);
+document.querySelector('.top a').textContent = `${PROFILE.firstName} M-L ©${new Date().getFullYear()}`;
+
+$('#main').innerHTML = `
+<section class="hero" id="top">
+    <div class="mono live" style="margin-bottom:2vh">Recherche une alternance · ${esc(SEARCH.program)} · ${esc(SEARCH.start)}</div>
+    ${kin(PROFILE.firstName)}${kin(PROFILE.lastName)}
+    <div class="hero-meta">
+        <p>${esc(PROFILE.pitch.main)}</p>
+        <p><b>Aujourd'hui</b><br>${esc(EXPERIENCES[0].role)} chez ${esc(EXPERIENCES[0].company)}<br>${esc(cur.title)} — ${esc(cur.school)}</p>
+        <div><p><b>${esc(PROFILE.city)}</b> · ${SEARCH.cities.slice(1).map(esc).join(' · ')}</p>
+            <div class="links"><a href="mailto:${PROFILE.email}">Email</a><a href="${PROFILE.linkedin}" target="_blank" rel="noopener">LinkedIn ↗</a><a href="${PROFILE.github}" target="_blank" rel="noopener">GitHub ↗</a>${PROFILE.cv ? `<a href="${PROFILE.cv}" download>CV ↓</a>` : ''}</div></div>
+    </div>
+</section>
+
+<section class="sec" id="recherche">
+    <div class="sec-h"><h2>Recherche</h2><span class="mono">01</span></div>
+    <div class="search">
+        <div><span class="mono">Contrat</span><b>${esc(SEARCH.contract)}<br>${esc(SEARCH.duration)}</b></div>
+        <div><span class="mono">Formation</span><b>${esc(SEARCH.program)}<br>${esc(SEARCH.level)}</b></div>
+        <div><span class="mono">École</span><b>${esc(SEARCH.school)}</b></div>
+        <div><span class="mono">Début</span><b>${esc(SEARCH.start)}<br>J-${monthsUntilStart()} mois</b></div>
+        ${SEARCH.rhythm ? `<div><span class="mono">Rythme</span><b>${esc(SEARCH.rhythm)}</b></div>` : ''}
+        <div class="missions"><span class="mono" style="width:100%">Missions visées · ${esc(SEARCH.region)}</span>${SEARCH.domains.map(d => `<span class="pill">${esc(d)}</span>`).join('')}</div>
+    </div>
+</section>
+
+<section class="sec" id="skills">
+    <div class="sec-h"><h2>Hard skills</h2><span class="mono">02 · attrapez-les</span></div>
+    <div class="play-ui" id="play-ui"></div>
+    <div class="pit" id="pit"><div class="ghost">${SKILLS.reduce((n, c) => n + c.items.length, 0)}<br>TECHNOS</div></div>
+    <div class="skill-list">${SKILLS.map((c, i) => `<div><h4><i class="body-pill c${i}" style="position:static;visibility:visible;padding:0;width:12px;height:12px"></i>${esc(c.name)}</h4><p>${c.items.map(esc).join(', ')}</p></div>`).join('')}</div>
+</section>
+
+<section class="sec soft-sec">
+    <div class="sec-h"><h2>Soft skills</h2><span class="mono">03</span></div>
+    <div class="soft">${SOFT_SKILLS.map(s => `<div class="soft-row">${kin(s.name)}<p>${esc(s.desc)}</p></div>`).join('')}</div>
+</section>
+
+<section class="sec" id="freelance">
+    <div class="sec-h"><h2>Freelance</h2><span class="mono">${esc(EXPERIENCES[1].company)} · depuis ${EXPERIENCES[1].start.slice(0, 4)}</span></div>
+    <div class="svc">${SERVICES.map((s, i) => `<div><span class="n">0${i + 1}</span><h3>${esc(s.name)}</h3><p>${esc(s.desc)}</p>${tags(s.tools)}</div>`).join('')}</div>
+</section>
+
+<section class="hscroll" id="projets">
+    <div class="sticky"><div class="track" id="track">
+        <div class="panel intro"><span class="mono" style="color:#aaa">04 · projets en production</span><h2>${PROJECTS.length}<br>produits<br>en ligne</h2><span class="mono" style="color:#aaa">scroll →</span></div>
+        ${PROJECTS.map(p => `<article class="panel"><div class="shots" data-shots>${[p.thumbnail, ...p.images].map((s, i) => `<img src="${s}" alt="" class="${i ? '' : 'on'}">`).join('')}</div>
+        <div class="txt"><span class="mono">${p.badges.join(' · ')}</span><h3>${esc(p.name)}</h3><p>${esc(p.description)}</p>
+        <ul>${p.highlights.map(h => `<li>${esc(h)}</li>`).join('')}</ul>${tags(p.tags)}<a class="go" href="${p.url}" target="_blank" rel="noopener">${p.url.replace('https://', '')} ↗</a></div></article>`).join('')}
+    </div></div>
+</section>
+
+<section class="sec" id="parcours">
+    <div class="sec-h"><h2>Parcours</h2><span class="mono">05 · ${Math.floor(monthsOfExperience() / 12)} ans+ en entreprise</span></div>
+    ${EXPERIENCES.map(e => `<div class="row"><span class="scr" data-scramble="${esc(e.period)}">${esc(e.period)}</span>
+        <div><h3>${esc(e.role)}${e.end ? '' : '<span class="badge">EN COURS</span>'}</h3><span class="mono">${esc(e.company)}${e.companyDesc ? ' — ' + esc(e.companyDesc) : ''} · ${esc(e.type)}</span></div>
+        <div>${e.points.length ? `<ul>${e.points.map(p => `<li>${esc(p)}</li>`).join('')}</ul>` : ''}${e.tags.length ? tags(e.tags) : ''}</div></div>`).join('')}
+    <h3 class="sub-h">Formation</h3>
+    ${EDUCATION.map(e => `<div class="row"><span class="scr" data-scramble="${esc(e.period)}">${esc(e.period)}</span>
+        <div><h3>${esc(e.title)}${e.current ? '<span class="badge">EN COURS</span>' : ''}${e.upcoming ? '<span class="badge" style="background:#111">VISÉ</span>' : ''}</h3><span class="mono">${esc(e.school)} · ${esc(e.level)}</span></div>
+        <div><p style="font-size:15px;color:#3a3934">${esc(e.desc)}</p></div></div>`).join('')}
+</section>
+
+<section class="sec" id="certifs">
+    <div class="sec-h"><h2>Certifs</h2><span class="mono">06 · ${CERTIFICATIONS.length} · cliquer pour ouvrir</span></div>
+    <div class="certs">${CERTIFICATIONS.map(c => `<button data-cert="${c.file}"><span>${c.provider} · ${c.file.split('.').pop()}</span>${esc(c.name)}</button>`).join('')}</div>
+    <div class="langs">${LANGUAGES.map(l => `<div><b>${esc(l.name)}</b><div class="bar"><i style="width:${l.level / 5 * 100}%"></i></div><span class="mono">${esc(l.cefr)} — ${esc(l.desc)}</span></div>`).join('')}</div>
+</section>
+
+<section class="contact" id="contact">
+    <span class="mono" style="color:#999">07 · contact</span>
+    <a class="mail" href="mailto:${PROFILE.email}">${kin(PROFILE.email.split('@')[0])}${kin('@' + PROFILE.email.split('@')[1])}</a>
+    <div class="links" style="margin-top:5vh"><a href="${PROFILE.phoneHref}">${esc(PROFILE.phone)}</a><a href="${PROFILE.linkedin}" target="_blank" rel="noopener">LinkedIn ↗</a><a href="${PROFILE.github}" target="_blank" rel="noopener">GitHub ↗</a>
+    ${SITES.filter(s => s.id !== 'main').map(s => `<a href="${s.url}">${s.label}</a>`).join('')}</div>
+</section>`;
+
+// Accent letter in the hero name + stagger index for the intro animation
+document.querySelectorAll('.hero .kin')[1]?.lastElementChild?.classList.add('a');
+document.querySelectorAll('.hero .kin span').forEach((s, i) => s.style.setProperty('--i', i));
+
+// Scroll progress + soft-skill rows leaning with scroll speed
+const progress = document.createElement('div');
+progress.className = 'progress';
+document.body.appendChild(progress);
+const softEl = $('.soft');
+let lastY = scrollY, skewTimer;
+addEventListener('scroll', () => {
+    progress.style.transform = `scaleX(${scrollY / (document.documentElement.scrollHeight - innerHeight)})`;
+    const v = scrollY - lastY; lastY = scrollY;
+    softEl.style.setProperty('--skew', `${Math.max(-6, Math.min(6, v * .12))}deg`);
+    clearTimeout(skewTimer); skewTimer = setTimeout(() => softEl.style.setProperty('--skew', '0deg'), 120);
+}, { passive: true });
+
+// Magnetic links: pulled a few px toward the cursor.
+if (matchMedia('(hover:hover)').matches) document.querySelectorAll('.links a, .go, .play-ui button').forEach(el => {
+    el.classList.add('mag');
+    el.addEventListener('pointermove', e => {
+        const r = el.getBoundingClientRect();
+        el.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * .3}px,${(e.clientY - r.top - r.height / 2) * .4}px)`;
+    });
+    el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+});
+
+// ── Cursor + kinetic type: weight/width grow near the pointer ──
+const cursor = $('#cursor');
+let mx = -999, my = -999;
+addEventListener('pointermove', e => { mx = e.clientX; my = e.clientY; cursor.style.transform = `translate(${mx}px,${my}px)`; });
+document.addEventListener('pointerover', e => cursor.classList.toggle('big', !!e.target.closest('a,button,.body-pill')));
+const letters = [...document.querySelectorAll('.kin span')];
+let rects = [];
+const measure = () => { rects = letters.map(l => { const r = l.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2 + scrollY]; }); };
+let kinQueued = false;
+function kinUpdate() {
+    kinQueued = false;
+    const R = Math.max(220, innerWidth * .22);
+    for (let i = 0; i < letters.length; i++) {
+        const [x, y] = rects[i], cy = y - scrollY;
+        if (cy < -300 || cy > innerHeight + 300) continue;
+        const d = Math.hypot(x - mx, cy - my), k = Math.max(0, 1 - d / R);
+        letters[i].style.fontVariationSettings = `'wght' ${Math.round(300 + 650 * k)}, 'wdth' ${Math.round(60 + 70 * k)}`;
+    }
+}
+const queueKin = () => { if (!kinQueued) { kinQueued = true; requestAnimationFrame(kinUpdate); } };
+addEventListener('pointermove', queueKin); addEventListener('scroll', queueKin, { passive: true });
+document.fonts.ready.then(() => { measure(); kinUpdate(); });
+addEventListener('resize', () => { measure(); setupPit(); });
+
+// ── Physics pit (Matter.js) ───────────────────────────────────
+const { Engine, Runner, Bodies, Composite, Mouse, MouseConstraint, Body, Events } = Matter;
+const pit = $('#pit');
+const engine = Engine.create({ gravity: { y: 1 } });
+const runner = Runner.create();
+let pills = [], walls = [], dropped = false, running = false;
+const touch = matchMedia('(hover:none)').matches;
+
+$('#play-ui').innerHTML = `<button data-cat="all" class="on">Tout</button>${SKILLS.map((c, i) => `<button data-cat="${i}">${esc(c.name)}</button>`).join('')}<button data-shake>⟲ Secouer</button>`;
+SKILLS.forEach((c, ci) => c.items.forEach(name => {
+    const el = document.createElement('div');
+    el.className = `body-pill c${ci}`; el.textContent = name; el.dataset.cat = ci;
+    pit.appendChild(el);
+    pills.push({ el, ci });
+}));
+
+function setupPit() {
+    const W = pit.clientWidth, H = pit.clientHeight, T = 200;
+    Composite.remove(engine.world, walls);
+    walls = [Bodies.rectangle(W / 2, H + T / 2, W * 2, T, { isStatic: true }), Bodies.rectangle(-T / 2, H / 2, T, H * 3, { isStatic: true }),
+        Bodies.rectangle(W + T / 2, H / 2, T, H * 3, { isStatic: true })];
+    Composite.add(engine.world, walls);
+}
+function drop() {
+    if (dropped) return; dropped = true;
+    const W = pit.clientWidth;
+    pills.forEach((p, i) => {
+        const w = p.el.offsetWidth, h = p.el.offsetHeight;
+        p.w = w; p.h = h; p.el.style.visibility = 'visible';
+        p.body = Bodies.rectangle(40 + Math.random() * (W - 80), -60 - i * 28, w, h, { chamfer: { radius: h / 2 }, restitution: .35, friction: .08, density: .002 });
+        Body.setAngle(p.body, (Math.random() - .5) * .8);
+        Composite.add(engine.world, p.body);
+    });
+}
+Events.on(engine, 'afterUpdate', () => {
+    for (const p of pills) if (p.body) {
+        const { x, y } = p.body.position;
+        p.el.style.transform = `translate(${x - p.w / 2}px,${y - p.h / 2}px) rotate(${p.body.angle}rad)`;
+    }
+});
+setupPit();
+if (!touch) {
+    const mouse = Mouse.create(pit);
+    // Let the page scroll normally over the pit.
+    ['mousewheel', 'DOMMouseScroll', 'wheel'].forEach(ev => mouse.element.removeEventListener(ev, mouse.mousewheel));
+    Composite.add(engine.world, MouseConstraint.create(engine, { mouse, constraint: { stiffness: .2, render: { visible: false } } }));
+}
+new IntersectionObserver(([e]) => {
+    if (e.isIntersecting) { drop(); if (!running) { Runner.run(runner, engine); running = true; } }
+    else if (running) { Runner.stop(runner); running = false; }
+}, { threshold: .2 }).observe(pit);
+
+$('#play-ui').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.hasAttribute('data-shake')) {
+        pills.forEach(p => p.body && Body.setVelocity(p.body, { x: (Math.random() - .5) * 30, y: -18 - Math.random() * 14 }));
+        return;
+    }
+    document.querySelectorAll('#play-ui [data-cat]').forEach(x => x.classList.toggle('on', x === b));
+    const cat = b.dataset.cat;
+    pills.forEach(p => {
+        const hit = cat === 'all' || +cat === p.ci;
+        p.el.classList.toggle('dim', !hit);
+        if (hit && cat !== 'all' && p.body) Body.setVelocity(p.body, { x: (Math.random() - .5) * 8, y: -22 - Math.random() * 6 });
+    });
+});
+
+// ── Horizontal project scroll ────────────────────────────────
+const hs = $('.hscroll'), track = $('#track');
+function sizeH() { hs.style.height = (track.scrollWidth - innerWidth + innerHeight) + 'px'; }
+function onH() {
+    const r = hs.getBoundingClientRect(), max = track.scrollWidth - innerWidth;
+    const p = Math.min(1, Math.max(0, -r.top / (hs.offsetHeight - innerHeight)));
+    track.style.transform = `translateX(${-p * max}px)`;
+}
+addEventListener('scroll', onH, { passive: true }); addEventListener('resize', () => { sizeH(); onH(); });
+addEventListener('load', () => { sizeH(); onH(); measure(); }); sizeH();
+document.querySelectorAll('[data-shots]').forEach(box => {
+    const imgs = box.querySelectorAll('img'); let i = 0;
+    setInterval(() => { imgs[i].classList.remove('on'); i = (i + 1) % imgs.length; imgs[i].classList.add('on'); }, 3000);
+});
+
+// ── Scramble dates when they enter the screen ────────────────
+const GLYPHS = '01#%&*+=<>/\\ABCDEFXYZ';
+const scrambleIO = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    scrambleIO.unobserve(e.target);
+    const el = e.target, final = el.dataset.scramble; let f = 0;
+    const iv = setInterval(() => {
+        el.textContent = [...final].map((ch, i) => i < f / 2 || ch === ' ' ? ch : GLYPHS[Math.floor(Math.random() * GLYPHS.length)]).join('');
+        if (++f > final.length * 2) { clearInterval(iv); el.textContent = final; }
+    }, 30);
+}), { threshold: 1 });
+document.querySelectorAll('[data-scramble]').forEach(el => scrambleIO.observe(el));
+</script>
+<script type="module" src="/lab-switcher.js"></script>
+</body>
+</html>

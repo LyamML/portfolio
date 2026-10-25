@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lyam Mafray-Lizé — dev</title>
+<meta name="description" content="Portfolio développeur de Lyam Mafray-Lizé : Fullstack Node.js, TypeScript, Python, Docker. Alternance Mastère IA & Data 2027.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+    --bg:#ffffff; --side:#f7f7f7; --act:#efefef; --line:#e6e6e6; --text:#1f1f1f; --muted:#6e6e6e; --faint:#a0a0a0;
+    --accent:#005fb8; --sel:#e8f1fb;
+    --kw:#af00db; --str:#a31515; --key:#0451a5; --num:#098658; --com:#008000; --type:#267f99; --fn:#795e26;
+    --sans:'Geist',system-ui,sans-serif; --mono:'Geist Mono',ui-monospace,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font:400 14px/1.6 var(--sans)}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* App shell: fixed viewport, only the editor scrolls */
+.app{height:100vh;display:grid;grid-template-rows:36px minmax(0,1fr) 24px;grid-template-columns:48px 250px minmax(0,1fr)}
+.titlebar{grid-column:1/-1;background:var(--act);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:center;font:500 12.5px var(--sans);color:var(--muted)}
+.titlebar button{background:#fff;border:1px solid var(--line);border-radius:6px;padding:3px 0;width:min(420px,60vw);color:var(--muted);font:inherit;cursor:pointer;display:flex;justify-content:center;gap:10px}
+.titlebar button:hover{border-color:#c5c5c5}
+.titlebar kbd{font:11px var(--mono);color:var(--faint)}
+.activity{background:var(--act);border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;padding-top:8px;gap:4px}
+.activity button{width:36px;height:36px;display:grid;place-items:center;border-radius:6px;color:var(--muted);font-size:16px;background:none;border:0;cursor:pointer}
+.activity button:hover{background:#e3e3e3;color:var(--text)}
+.activity button.on{color:var(--text);box-shadow:inset 2px 0 0 var(--accent)}
+.explorer{background:var(--side);border-right:1px solid var(--line);overflow-y:auto;font-size:13px;min-height:0}
+.explorer h6{font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:12px 18px 6px}
+.tree button{display:flex;align-items:center;gap:7px;width:100%;padding:3px 12px;color:var(--text);background:none;border:1px solid transparent;font:inherit;cursor:pointer;white-space:nowrap;text-align:left}
+.tree button:hover{background:#ececec}
+.tree button.on{background:var(--sel);border-color:#90c2f9}
+.tree .dir{font-weight:500;cursor:default}
+.tree .dir:hover{background:none}
+.ic{width:16px;text-align:center;font:600 10px var(--mono);flex:none}
+.ic.md{color:#2b7bd6}.ic.ts{color:#3178c6}.ic.json{color:#c09400}.ic.yml{color:#cb171e}.ic.env{color:#5d8a00}.ic.dir{color:#c09400}
+.outline{padding:0 18px 18px;color:var(--muted);font-size:12.5px}
+.outline div{display:flex;justify-content:space-between;padding:1px 0}
+.outline b{color:var(--text);font-weight:500}
+
+.editor{display:flex;flex-direction:column;min-width:0;min-height:0}
+.tabs{display:flex;background:var(--side);border-bottom:1px solid var(--line);overflow-x:auto;flex:none;scrollbar-width:thin}
+.tab{display:flex;gap:6px;align-items:center;padding:7px 8px 7px 14px;font-size:13px;color:var(--muted);border-right:1px solid var(--line);white-space:nowrap;cursor:pointer;user-select:none}
+.tab:hover{background:#f0f0f0}
+.tab.on{background:var(--bg);color:var(--text);box-shadow:inset 0 1px 0 var(--accent)}
+.tab .x{width:18px;height:18px;border-radius:4px;display:grid;place-items:center;font-size:14px;line-height:1;visibility:hidden}
+.tab:hover .x,.tab.on .x{visibility:visible}
+.tab .x:hover{background:#e3e3e3}
+.crumbs{font-size:12.5px;color:var(--muted);padding:5px 20px;border-bottom:1px solid #f0f0f0;flex:none}
+.crumbs b{color:var(--text);font-weight:500}
+.pane{flex:1;overflow:auto;min-height:0}
+.pane.enter{animation:fade .18s ease}
+@keyframes fade{from{opacity:0}}
+.empty{height:100%;display:grid;place-items:center;color:var(--faint);text-align:center;font-size:13px}
+.empty b{display:block;font:600 40px var(--sans);color:#e2e2e2;margin-bottom:10px}
+
+/* Code */
+.code{font:13.5px/1.75 var(--mono);padding:10px 0 22px;counter-reset:ln}
+.code .l{display:block;padding-right:24px;white-space:pre}
+.code .l::before{counter-increment:ln;content:counter(ln);display:inline-block;width:56px;padding-right:20px;text-align:right;color:var(--faint)}
+.k{color:var(--kw)} .s{color:var(--str)} .p{color:var(--key)} .n{color:var(--num)} .c{color:var(--com)} .t{color:var(--type)} .f{color:var(--fn)} .b{color:#0000ff}
+.code a{color:inherit;text-decoration:underline;text-decoration-color:rgba(0,0,0,.25)}
+
+/* Markdown preview */
+.preview{padding:40px 56px 48px;max-width:920px}
+.preview h1{font:700 44px/1.1 var(--sans);letter-spacing:-.03em;padding-bottom:12px;border-bottom:1px solid var(--line);margin-bottom:16px}
+.preview h2{font:600 22px var(--sans);margin:28px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.preview p{color:#333;margin-bottom:12px;font-size:16px;max-width:70ch}
+.shields{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 18px}
+.shield{display:inline-flex;font:600 11.5px var(--sans);border-radius:4px;overflow:hidden}
+.shield b{background:#555;color:#fff;padding:3px 7px;font-weight:600}
+.shield span{padding:3px 7px;color:#fff}
+.preview table{border-collapse:collapse;margin:8px 0 16px;font-size:14.5px}
+.preview th,.preview td{border:1px solid var(--line);padding:6px 14px;text-align:left}
+.preview th{background:var(--side);font-weight:600}
+.preview ul{padding-left:22px;margin-bottom:12px}
+.preview li{margin:4px 0}
+.filelinks{display:flex;flex-wrap:wrap;gap:6px}
+.filelinks button{font:12.5px var(--mono);border:1px solid var(--line);background:var(--side);border-radius:5px;padding:3px 9px;cursor:pointer;color:var(--accent)}
+.filelinks button:hover{border-color:var(--accent)}
+.ss{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.ss div{border:1px solid var(--line);border-radius:8px;padding:14px 16px}
+.ss b{display:block;font-size:15px}
+.ss span{color:var(--muted);font-size:13.5px}
+
+/* Project split view */
+.split{display:grid;grid-template-columns:1.1fr 1fr;min-height:100%}
+.split .code{border-right:1px solid var(--line)}
+.pv{padding:18px 20px;background:#fbfbfb}
+.pv .hd{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--muted);margin-bottom:10px}
+.pv .hd a{font-weight:600}
+.browser{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;box-shadow:0 6px 24px rgba(0,0,0,.06)}
+.browser .url{font:12px var(--mono);color:var(--muted);padding:6px 10px;border-bottom:1px solid var(--line);background:var(--side)}
+.browser img{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top;display:block;cursor:zoom-in}
+.strip{display:flex;gap:6px;margin-top:10px;overflow-x:auto}
+.strip img{width:80px;aspect-ratio:16/10;object-fit:cover;object-position:top;border-radius:4px;border:2px solid transparent;cursor:pointer;opacity:.7}
+.strip img.on,.strip img:hover{border-color:var(--accent);opacity:1}
+
+.folder{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:22px 24px 28px}
+.fileicon{border:1px solid var(--line);border-radius:8px;padding:14px;cursor:pointer;display:flex;flex-direction:column;gap:10px;background:#fff;text-align:left;font:inherit}
+.fileicon:hover{border-color:var(--accent);background:var(--sel)}
+.fileicon .ext{font:600 11px var(--mono);align-self:flex-start;padding:1px 6px;border-radius:3px;color:#fff}
+.fileicon b{font-size:14px;font-weight:600;line-height:1.25}
+.fileicon span{font-size:12px;color:var(--muted)}
+
+.statusbar{grid-column:1/-1;background:var(--accent);color:#fff;font:12px var(--sans);display:flex;align-items:center;gap:18px;padding:0 12px;white-space:nowrap;overflow:hidden}
+.statusbar .r{margin-left:auto;display:flex;gap:18px}
+.statusbar a{color:#fff}
+
+/* Quick open (Ctrl+P) */
+.palette{position:fixed;inset:0;z-index:40;display:none;justify-content:center;align-items:flex-start;padding-top:60px;background:rgba(0,0,0,.08)}
+.palette.on{display:flex}
+.palette .box{width:min(560px,92vw);background:#fff;border:1px solid var(--line);border-radius:8px;box-shadow:0 16px 48px rgba(0,0,0,.18);overflow:hidden}
+.palette input{width:100%;border:0;border-bottom:1px solid var(--line);padding:10px 14px;font:14px var(--sans);outline:0}
+.palette .res button{display:flex;gap:8px;align-items:center;width:100%;padding:6px 14px;background:none;border:0;font:13px var(--sans);cursor:pointer;text-align:left}
+.palette .res button span{color:var(--muted);margin-left:auto;font-size:12px}
+.palette .res button.on{background:var(--sel)}
+
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;z-index:50;padding:24px;cursor:zoom-out}
+.lightbox.on{display:flex}
+.lightbox img{max-width:100%;max-height:90vh;border-radius:8px}
+
+@media (max-width:980px){
+    .app{grid-template-columns:minmax(0,1fr)}
+    .activity,.explorer{display:none}
+    .split{grid-template-columns:1fr}
+    .split .code{border-right:0;border-bottom:1px solid var(--line)}
+    .folder{grid-template-columns:1fr 1fr}
+    .ss{grid-template-columns:1fr 1fr}
+    .preview{padding:24px 16px}
+    .preview h1{font-size:32px}
+    .code .l::before{width:36px;padding-right:12px}
+    .statusbar .hide-m{display:none}
+    .tab .x{display:none}
+}
+</style>
+</head>
+<body>
+<div class="app">
+    <div class="titlebar"><button id="open-palette">🔍 lyam-mafray-lize — ouvrir un fichier <kbd>Ctrl+P</kbd></button></div>
+    <nav class="activity" id="activity"></nav>
+    <aside class="explorer">
+        <h6>Explorateur</h6><div class="tree" id="tree"></div>
+        <h6 style="margin-top:14px">Plan</h6><div class="outline" id="outline"></div>
+    </aside>
+    <section class="editor">
+        <div class="tabs" id="tabs"></div>
+        <div class="crumbs" id="crumbs"></div>
+        <div class="pane" id="pane"></div>
+    </section>
+    <footer class="statusbar">
+        <span>⎇ main</span><span class="hide-m" id="sb-months"></span>
+        <span class="r"><span class="hide-m">Mastère IA &amp; Data · EPSI Rennes</span><a href="mailto:ly.mafraylize@gmail.com">✉ contact</a><span id="sb-lines"></span><span id="sb-lang"></span></span>
+    </footer>
+</div>
+<div class="palette" id="palette"><div class="box"><input id="pal-in" placeholder="Rechercher un fichier…" autocomplete="off"><div class="res" id="pal-res"></div></div></div>
+<div class="lightbox" id="lb"><img alt=""></div>
+
+<script type="module">
+import { PROFILE, SEARCH, EXPERIENCES, EDUCATION, SKILLS, SOFT_SKILLS, LANGUAGES, CERTIFICATIONS, PROJECTS, SITES, fullName, monthsUntilStart, monthsOfExperience } from '/data.js';
+import '/lab/cert-viewer.js';
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const isId = k => /^[A-Za-z_$][\w$]*$/.test(k);
+
+// Minimal literal pretty-printer with syntax colouring (TS object or JSON).
+function lit(v, ind = '', json = false) {
+    const q = json ? '"' : "'";
+    if (v === null) return `<span class="b">null</span>`;
+    if (typeof v === 'boolean') return `<span class="b">${v}</span>`;
+    if (typeof v === 'number') return `<span class="n">${v}</span>`;
+    if (typeof v === 'string') return `<span class="s">${q}${esc(v)}${q}</span>`;
+    const inner = ind + '  ';
+    if (Array.isArray(v)) {
+        if (!v.length) return '[]';
+        const one = `[${v.map(x => lit(x, inner, json)).join(', ')}]`;
+        if (v.every(x => typeof x !== 'object') && v.join(', ').length < 70) return one;
+        return `[\n${v.map(x => inner + lit(x, inner, json)).join(',\n')}\n${ind}]`;
+    }
+    return `{\n${Object.keys(v).map(k => `${inner}<span class="p">${json || !isId(k) ? `${q}${esc(k)}${q}` : k}</span>: ${lit(v[k], inner, json)}`).join(',\n')}\n${ind}}`;
+}
+const lines = html => `<div class="code">${html.split('\n').map(l => `<span class="l">${l || ' '}</span>`).join('')}</div>`;
+const cmt = s => `<span class="c">${esc(s)}</span>`;
+const fileLink = (id, label) => `<button data-open="${id}">${label}</button>`;
+
+// ── Files ─────────────────────────────────────────────────────
+const devOrder = ['web', 'infra', 'db', 'auto', 'data', 'ai'];
+const FILES = [
+    { id: 'readme', path: 'README.md', ic: 'md', lang: 'Markdown', render: readme },
+    { id: 'skills', path: 'src/skills.ts', ic: 'ts', lang: 'TypeScript', render: skills },
+    ...PROJECTS.map(p => ({ id: p.id, path: `src/projets/${p.id}.ts`, ic: 'ts', lang: 'TypeScript', render: () => project(p) })),
+    { id: 'experiences', path: 'data/experiences.json', ic: 'json', lang: 'JSON', render: experiences },
+    { id: 'formations', path: 'data/formations.yml', ic: 'yml', lang: 'YAML', render: formations },
+    { id: 'soft-skills', path: 'docs/soft-skills.md', ic: 'md', lang: 'Markdown', render: () => soft() },
+    { id: 'certifications', path: 'docs/certifications/', ic: 'dir', lang: 'Dossier', render: () => certs() },
+    { id: 'langues', path: 'i18n/langues.json', ic: 'json', lang: 'JSON', render: () => langues() },
+    { id: 'contact', path: '.env.contact', ic: 'env', lang: 'Properties', render: contact },
+];
+const byId = Object.fromEntries(FILES.map(f => [f.id, f]));
+const icon = f => `<span class="ic ${f.ic}">${f.ic === 'dir' ? '▸' : f.ic.toUpperCase().slice(0, 2)}</span>`;
+const base = f => f.path.split('/').filter(Boolean).pop();
+
+function readme() {
+    const cur = EDUCATION.find(e => e.current);
+    return `<div class="preview"><h1>${esc(fullName)}</h1>
+<div class="shields"><span class="shield"><b>alternance</b><span style="background:#e05d44">${esc(SEARCH.start.toLowerCase())}</span></span>
+<span class="shield"><b>visé</b><span style="background:#007ec6">${esc(SEARCH.program)}</span></span>
+<span class="shield"><b>poste actuel</b><span style="background:#44cc11">${esc(EXPERIENCES[0].company)}</span></span>
+<span class="shield"><b>projets en prod</b><span style="background:#97ca00">${PROJECTS.length}</span></span>
+<span class="shield"><b>certifs</b><span style="background:#a4a61d">${CERTIFICATIONS.length}</span></span></div>
+<p>${esc(PROFILE.pitch.dev)}</p>
+<h2>Ce que je recherche</h2>
+<table><tr><th>Contrat</th><td>${esc(SEARCH.contract)} · ${esc(SEARCH.duration)}</td></tr>
+<tr><th>Formation</th><td>${esc(SEARCH.program)} (${esc(SEARCH.level)}) — ${esc(SEARCH.school)}</td></tr>
+<tr><th>Début</th><td>${esc(SEARCH.start)}</td></tr>${SEARCH.rhythm ? `<tr><th>Rythme</th><td>${esc(SEARCH.rhythm)}</td></tr>` : ''}
+<tr><th>Missions</th><td>${SEARCH.domains.map(esc).join(' · ')}</td></tr>
+<tr><th>Zone</th><td>${esc(SEARCH.region)} — ${SEARCH.cities.map(esc).join(', ')}</td></tr></table>
+<h2>En ce moment</h2>
+<ul><li><b>${esc(EXPERIENCES[0].role)}</b> chez <a href="${EXPERIENCES[0].companyUrl}" target="_blank" rel="noopener">${esc(EXPERIENCES[0].company)}</a> (${esc(EXPERIENCES[0].companyDesc)})</li>
+<li><b>${esc(cur.title)}</b> — ${esc(cur.school)}</li><li>${esc(EXPERIENCES[1].role)} sur ${esc(EXPERIENCES[1].company)}</li>
+<li>${Math.floor(monthsOfExperience() / 12)} ans+ d'expérience pro cumulée (alternance &amp; freelance)</li></ul>
+<h2>Fichiers du projet</h2><div class="filelinks">${FILES.filter(f => f.id !== 'readme').map(f => fileLink(f.id, base(f))).join('')}</div></div>`;
+}
+function skills() {
+    const cats = [...SKILLS].sort((a, b) => devOrder.indexOf(a.id) - devOrder.indexOf(b.id));
+    let s = `<span class="k">export type</span> <span class="t">Skill</span> = <span class="t">string</span>;\n\n${cmt('/** Hard skills, classés pour un poste de développeur. */')}\n<span class="k">export const</span> skills = {\n`;
+    cats.forEach(c => { s += `  ${cmt('// ' + c.name + (c.focus.includes('dev') ? '  ★ cœur de métier' : ''))}\n  <span class="p">${c.id}</span>: ${lit(c.items, '  ')},\n`; });
+    s += `} <span class="k">satisfies</span> <span class="t">Record</span>&lt;<span class="t">string</span>, <span class="t">Skill</span>[]&gt;;\n\n${cmt(`// total : ${SKILLS.reduce((n, c) => n + c.items.length, 0)} technologies`)}`;
+    return lines(s);
+}
+function project(p) {
+    const s = `${cmt('/**')}\n${cmt(' * ' + p.name + ' — ' + p.tagline)}\n${cmt(' * ' + p.angles.dev)}\n${cmt(' */')}\n<span class="k">export const</span> <span class="f">${p.id}</span> = ${lit({ name: p.name, statut: p.badges, url: p.url, stack: p.tags, fonctionnalites: p.highlights })};\n`;
+    return `<div class="split">${lines(s)}<div class="pv"><div class="hd"><span>Aperçu — ${esc(p.name)}</span><a href="${p.url}" target="_blank" rel="noopener">Ouvrir le site ↗</a></div>
+<div class="browser"><div class="url">${esc(p.url)}</div><img src="${p.thumbnail}" alt="${esc(p.name)}" class="main-shot"></div>
+<div class="strip">${[p.thumbnail, ...p.images].map((src, i) => `<img src="${src}" alt="" class="${i ? '' : 'on'}">`).join('')}</div>
+<p style="margin-top:12px;color:#444;font-size:13.5px">${esc(p.description)}</p></div></div>`;
+}
+function experiences() {
+    return lines(lit(EXPERIENCES.map(e => {
+        const o = { poste: e.role, entreprise: e.company, lieu: e.place, type: e.type, periode: e.period };
+        if (e.companyDesc) o.secteur = e.companyDesc;
+        if (e.points.length) o.missions = e.points;
+        if (e.tags.length) o.stack = e.tags;
+        return o;
+    }), '', true));
+}
+function formations() {
+    let s = `${cmt('# Parcours scolaire — du plus récent au plus ancien')}\n<span class="p">formations</span>:\n`;
+    EDUCATION.forEach(e => {
+        s += `  - <span class="p">diplome</span>: <span class="s">${esc(e.title)}</span>${e.upcoming ? '  ' + cmt('# ← visé en alternance') : e.current ? '  ' + cmt('# ← en cours') : ''}\n`;
+        s += `    <span class="p">niveau</span>: <span class="s">${esc(e.level)}</span>\n    <span class="p">ecole</span>: <span class="s">${esc(e.school)}</span>\n`;
+        s += `    <span class="p">periode</span>: <span class="s">${esc(e.period)}</span>\n    <span class="p">details</span>: <span class="s">${esc(e.desc)}</span>\n`;
+    });
+    return lines(s.trimEnd());
+}
+const soft = () => `<div class="preview"><h1 style="font-size:32px">Soft skills</h1><div class="ss">${SOFT_SKILLS.map(s => `<div><b>${esc(s.name)}</b><span>${esc(s.desc)}</span></div>`).join('')}</div></div>`;
+const certs = () => `<div class="folder">${CERTIFICATIONS.map(c => {
+    const ext = c.file.split('.').pop();
+    return `<button class="fileicon" data-cert="${c.file}"><span class="ext" style="background:${ext === 'pdf' ? '#d0342c' : '#20beff'}">${c.provider} · .${ext}</span><b>${esc(c.name)}</b><span>Cliquer pour ouvrir</span></button>`;
+}).join('')}</div>`;
+const langues = () => lines(lit(Object.fromEntries(LANGUAGES.map(l => [l.name, { niveau: l.cefr, detail: l.desc, score: l.level }])), '', true));
+function contact() {
+    const row = (k, v, href) => `<span class="p">${k}</span>=<a class="s" href="${href}" ${href.startsWith('http') ? 'target="_blank" rel="noopener"' : ''}>${esc(v)}</a>`;
+    return lines([
+        cmt('# Me contacter — liens cliquables'), row('EMAIL', PROFILE.email, 'mailto:' + PROFILE.email), row('TEL', PROFILE.phone, PROFILE.phoneHref),
+        row('GITHUB', PROFILE.github, PROFILE.github), row('LINKEDIN', PROFILE.linkedin, PROFILE.linkedin), ...(PROFILE.cv ? [row('CV', PROFILE.cv, PROFILE.cv)] : []),
+        '', cmt('# Autres versions du portfolio'), ...SITES.filter(s => s.id !== 'dev').map(s => row('PORTFOLIO_' + s.id.toUpperCase(), s.url, s.url)),
+    ].join('\n'));
+}
+
+// ── Explorer tree ─────────────────────────────────────────────
+const groups = {};
+FILES.forEach(f => { const parts = f.path.split('/').filter(Boolean); (groups[f.path.endsWith('/') ? parts.slice(0, -1).join('/') : parts.slice(0, -1).join('/')] ||= []).push(f); });
+$('tree').innerHTML = `<button class="dir"><span class="ic dir">▾</span>PORTFOLIO</button>` + Object.entries(groups).sort(([a], [b]) => (a === '') - (b === '') || a.localeCompare(b)).map(([dir, fs]) =>
+    (dir ? `<button class="dir" style="padding-left:20px"><span class="ic dir">▾</span>${dir}</button>` : '') +
+    fs.map(f => `<button data-open="${f.id}" style="padding-left:${dir ? 36 : 20}px">${icon(f)}${base(f)}</button>`).join('')).join('');
+$('outline').innerHTML = [['projets en prod', PROJECTS.length], ['expériences', EXPERIENCES.length], ['diplômes', EDUCATION.length],
+    ['technos', SKILLS.reduce((n, c) => n + c.items.length, 0)], ['certifications', CERTIFICATIONS.length], ['langues', LANGUAGES.length]]
+    .map(([k, v]) => `<div>${k}<b>${v}</b></div>`).join('');
+$('activity').innerHTML = [['readme', '⧉', 'README'], ['skills', '⌥', 'Skills'], [PROJECTS[0].id, '▶', 'Projets'], ['experiences', '◷', 'Parcours'], ['contact', '✉', 'Contact']]
+    .map(([id, i, t]) => `<button data-open="${id}" title="${t}">${i}</button>`).join('');
+$('sb-months').textContent = `⏱ dispo dans ${monthsUntilStart()} mois`;
+
+// ── Tabs & routing ────────────────────────────────────────────
+let open = ['readme'], active = null;
+const rendered = {}; // cache file HTML so switching tabs is instant
+
+function show(id) {
+    const f = byId[id]; if (!f) return;
+    if (!open.includes(id)) open.push(id);
+    active = id;
+    const pane = $('pane');
+    pane.innerHTML = rendered[id] ||= f.render();
+    pane.scrollTop = 0;
+    pane.classList.remove('enter'); void pane.offsetWidth; pane.classList.add('enter');
+    $('crumbs').innerHTML = f.path.split('/').filter(Boolean).map((p, i, a) => i === a.length - 1 ? `<b>${esc(p)}</b>` : esc(p) + ' ›').join(' ');
+    $('sb-lang').textContent = f.lang;
+    $('sb-lines').textContent = pane.querySelector('.code') ? `Ln ${pane.querySelectorAll('.code .l').length}` : '';
+    document.querySelectorAll('[data-open]').forEach(b => b.classList.toggle('on', b.dataset.open === id && !b.closest('.filelinks')));
+    renderTabs();
+    history.replaceState(null, '', '#' + id);
+    wireProject(pane);
+}
+function close(id) {
+    const i = open.indexOf(id); open.splice(i, 1);
+    if (active === id) open.length ? show(open[Math.max(0, i - 1)]) : empty();
+    else renderTabs();
+}
+function empty() {
+    active = null;
+    $('pane').innerHTML = `<div class="empty"><div><b>⌘</b>Ouvrez un fichier depuis l'explorateur<br>ou <kbd>Ctrl+P</kbd></div></div>`;
+    $('crumbs').innerHTML = ''; renderTabs();
+}
+function renderTabs() {
+    $('tabs').innerHTML = open.map(id => `<div class="tab ${id === active ? 'on' : ''}" data-tab="${id}">${icon(byId[id])}${base(byId[id])}<span class="x" data-close="${id}">×</span></div>`).join('');
+    $('tabs').querySelector('.on')?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+}
+function wireProject(pane) {
+    pane.querySelectorAll('.pv').forEach(pv => {
+        const main = pv.querySelector('.main-shot');
+        pv.querySelectorAll('.strip img').forEach(img => img.addEventListener('click', () => {
+            pv.querySelectorAll('.strip img').forEach(i => i.classList.remove('on')); img.classList.add('on'); main.src = img.src;
+        }));
+        main.addEventListener('click', () => { $('lb').querySelector('img').src = main.src; $('lb').classList.add('on'); });
+    });
+}
+
+document.addEventListener('click', e => {
+    const c = e.target.closest('[data-close]'); if (c) { e.stopPropagation(); close(c.dataset.close); return; }
+    const t = e.target.closest('[data-tab]'); if (t) { show(t.dataset.tab); return; }
+    const o = e.target.closest('[data-open]'); if (o) show(o.dataset.open);
+});
+$('tabs').addEventListener('auxclick', e => { const t = e.target.closest('[data-tab]'); if (t && e.button === 1) close(t.dataset.tab); });
+$('lb').addEventListener('click', () => $('lb').classList.remove('on'));
+
+// ── Quick open (Ctrl+P) ───────────────────────────────────────
+const pal = $('palette'), palIn = $('pal-in'), palRes = $('pal-res');
+let palIdx = 0, palList = [];
+function palRender() {
+    const q = palIn.value.toLowerCase();
+    palList = FILES.filter(f => f.path.toLowerCase().includes(q));
+    palIdx = Math.min(palIdx, Math.max(0, palList.length - 1));
+    palRes.innerHTML = palList.map((f, i) => `<button class="${i === palIdx ? 'on' : ''}" data-pal="${f.id}">${icon(f)}${base(f)}<span>${f.path}</span></button>`).join('');
+}
+const palOpen = () => { pal.classList.add('on'); palIn.value = ''; palIdx = 0; palRender(); palIn.focus(); };
+const palClose = () => pal.classList.remove('on');
+$('open-palette').addEventListener('click', palOpen);
+palIn.addEventListener('input', () => { palIdx = 0; palRender(); });
+palIn.addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown') { palIdx = Math.min(palIdx + 1, palList.length - 1); palRender(); e.preventDefault(); }
+    else if (e.key === 'ArrowUp') { palIdx = Math.max(palIdx - 1, 0); palRender(); e.preventDefault(); }
+    else if (e.key === 'Enter' && palList[palIdx]) { show(palList[palIdx].id); palClose(); }
+    else if (e.key === 'Escape') palClose();
+});
+palRes.addEventListener('click', e => { const b = e.target.closest('[data-pal]'); if (b) { show(b.dataset.pal); palClose(); } });
+pal.addEventListener('click', e => { if (e.target === pal) palClose(); });
+addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'p') { e.preventDefault(); palOpen(); }
+    if (e.ctrlKey && e.key === 'Tab' && open.length > 1) { e.preventDefault(); show(open[(open.indexOf(active) + 1) % open.length]); }
+});
+
+show(byId[location.hash.slice(1)] ? location.hash.slice(1) : 'readme');
+if (active !== 'readme') { open = ['readme', active]; renderTabs(); }
+</script>
+<script type="module" src="/lab-switcher.js"></script>
+</body>
+</html>

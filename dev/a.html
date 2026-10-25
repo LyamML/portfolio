@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lyam Mafray-Lizé — dev</title>
+<meta name="description" content="Portfolio développeur de Lyam Mafray-Lizé : Fullstack Node.js, TypeScript, Python, Docker. Alternance Mastère IA & Data 2027.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+    --crust:#0b0b12; --base:#14141f; --mantle:#1b1b2a; --surface:#262638; --overlay:#6c7086; --sub:#a6adc8; --text:#cdd6f4;
+    --green:#a6e3a1; --blue:#89b4fa; --mauve:#cba6f7; --peach:#fab387; --yellow:#f9e2af; --red:#f38ba8; --teal:#94e2d5; --pink:#f5c2e7;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:var(--crust)}
+body{font:400 14px/1.65 var(--mono);color:var(--text);padding:24px 20px 70px;height:100vh;overflow:hidden;
+     background:radial-gradient(1200px 600px at 20% -10%,rgba(137,180,250,.08),transparent 60%),var(--crust)}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+::selection{background:var(--mauve);color:var(--crust)}
+
+.win{max-width:1240px;height:100%;margin:0 auto;background:var(--base);border:1px solid var(--surface);border-radius:12px;overflow:hidden;
+     box-shadow:0 40px 100px rgba(0,0,0,.55);display:flex;flex-direction:column}
+.bar{display:flex;align-items:center;gap:14px;height:42px;flex:none;padding:0 14px;background:var(--mantle);border-bottom:1px solid var(--surface)}
+.body{flex:1;min-height:0;display:grid;grid-template-columns:230px minmax(0,1fr)}
+.side{border-right:1px solid var(--surface);background:var(--mantle);padding:14px 10px;overflow-y:auto;display:flex;flex-direction:column;gap:2px}
+.side h6{font:600 11px var(--mono);color:var(--overlay);text-transform:uppercase;letter-spacing:.08em;padding:4px 10px 8px}
+.side button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:0;border-radius:6px;padding:7px 10px;color:var(--sub);font:inherit;font-size:13px;cursor:pointer;transition:background .12s,color .12s}
+.side button:hover{background:var(--surface);color:var(--text)}
+.side button.on{background:rgba(166,227,161,.12);color:var(--green)}
+.side button kbd{font:11px var(--mono);color:var(--overlay);border:1px solid var(--surface);border-radius:4px;padding:0 5px;min-width:20px;text-align:center}
+.side button.on kbd{border-color:rgba(166,227,161,.4);color:var(--green)}
+.side .foot{margin-top:auto;padding:12px 10px 4px;font-size:11.5px;color:var(--overlay);line-height:1.7}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:26px;padding-top:14px;border-top:1px dashed var(--surface)}
+.pager button{background:none;border:1px solid var(--surface);color:var(--sub);font:inherit;font-size:12.5px;padding:5px 12px;border-radius:6px;cursor:pointer}
+.pager button:hover{color:var(--green);border-color:var(--green)}
+.out{animation:outIn .25s ease}
+@keyframes outIn{from{opacity:0;transform:translateY(4px)}}
+.dots{display:flex;gap:7px}.dots i{width:12px;height:12px;border-radius:50%;background:var(--red)}.dots i:nth-child(2){background:var(--yellow)}.dots i:nth-child(3){background:var(--green)}
+.tabs{display:flex;gap:2px;flex:1;overflow:hidden}
+.tab{padding:6px 14px;border-radius:7px 7px 0 0;color:var(--overlay);font-size:12.5px;white-space:nowrap}
+.tab.on{background:var(--base);color:var(--text)}
+.skip{border:1px solid var(--surface);background:none;color:var(--sub);font:inherit;font-size:12px;padding:4px 10px;border-radius:6px;cursor:pointer}
+.skip:hover{color:var(--text);border-color:var(--overlay)}
+
+.term{padding:22px 28px 28px;overflow-y:auto;min-height:0}
+.line{white-space:pre-wrap;word-break:break-word}
+.ps1{color:var(--green);font-weight:600}.ps1 .p{color:var(--blue)}.ps1 .g{color:var(--mauve)}
+.cmd{color:var(--text)}
+.caret{display:inline-block;width:8px;height:17px;background:var(--text);vertical-align:-3px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.out{margin:6px 0 22px}
+.muted{color:var(--overlay)} .sub{color:var(--sub)}
+.c-green{color:var(--green)} .c-blue{color:var(--blue)} .c-mauve{color:var(--mauve)} .c-peach{color:var(--peach)} .c-yellow{color:var(--yellow)} .c-red{color:var(--red)} .c-teal{color:var(--teal)} .c-pink{color:var(--pink)}
+h2.sec{font:800 13px var(--mono);color:var(--peach);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+
+/* whoami / neofetch */
+.fetch{display:grid;grid-template-columns:auto 1fr;gap:32px;align-items:start}
+.ascii{color:var(--mauve);font-weight:800;line-height:1.15;font-size:13px;white-space:pre}
+.fetch h1{font:800 26px/1.2 var(--mono);color:var(--text);margin-bottom:2px}
+.fetch h1 span{color:var(--green)}
+.kv{display:grid;grid-template-columns:120px 1fr;column-gap:12px}
+.kv dt{color:var(--blue);font-weight:600}
+.kv dd{color:var(--text)}
+.palette{display:flex;gap:0;margin-top:12px}.palette i{width:26px;height:14px}
+
+/* tables */
+.tbl{border-collapse:collapse;margin-top:4px;width:100%}
+.tbl th{text-align:left;color:var(--overlay);font-weight:400;border-bottom:1px dashed var(--surface);padding:3px 18px 5px 0}
+.tbl td{padding:4px 18px 4px 0;vertical-align:top}
+.tbl tr:hover td{background:rgba(255,255,255,.02)}
+.chip{display:inline-block;padding:0 7px;margin:0 5px 5px 0;border-radius:4px;background:var(--surface);color:var(--text);font-size:12.5px}
+.chip.hl{background:rgba(166,227,161,.14);color:var(--green)}
+.bar-s{display:inline-block;height:9px;background:var(--green);border-radius:2px;vertical-align:0}
+
+/* projects */
+.proj{display:grid;grid-template-columns:300px 1fr;gap:22px;padding:16px;border:1px solid var(--surface);border-radius:10px;margin-bottom:14px;background:var(--mantle)}
+.proj img{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top;border-radius:6px;border:1px solid var(--surface);cursor:zoom-in}
+.proj h3{font:800 18px var(--mono);color:var(--text)}
+.proj .badge{font-size:11px;padding:1px 7px;border-radius:4px;margin-left:8px;vertical-align:2px;border:1px solid}
+.proj ul{list-style:none;margin:8px 0 10px}
+.proj li::before{content:'▸ ';color:var(--green)}
+.thumbs{display:flex;gap:6px;margin-top:6px;overflow-x:auto}
+.thumbs img{width:72px;aspect-ratio:16/10;border-radius:4px}
+
+/* git log */
+.commit{display:grid;grid-template-columns:auto 1fr;gap:0 12px;margin-bottom:12px}
+.graph{color:var(--mauve);white-space:pre}
+.hash{color:var(--yellow)}
+.refs{color:var(--teal)}
+.commit ul{list-style:none;color:var(--sub)}
+.commit li::before{content:'+ ';color:var(--green)}
+
+.cert{cursor:pointer;color:var(--blue)}
+.cert:hover{text-decoration:underline}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px 28px}
+
+/* prompt input */
+.input-row{display:flex;align-items:center;gap:8px}
+.input-row input{flex:1;background:none;border:0;outline:0;color:var(--text);font:inherit;caret-color:var(--green)}
+.hints{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.hints button{background:var(--mantle);border:1px solid var(--surface);color:var(--sub);font:inherit;font-size:12px;padding:3px 10px;border-radius:5px;cursor:pointer}
+.hints button:hover{color:var(--green);border-color:var(--green)}
+
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:50;padding:24px;cursor:zoom-out}
+.lightbox.on{display:flex}
+.lightbox img{max-width:100%;max-height:90vh;border-radius:8px}
+
+@media (max-width:760px){
+    body{padding:0 0 52px}
+    .win{border-radius:0;border-inline:0}
+    .body{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr)}
+    .side{flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid var(--surface);padding:6px}
+    .side h6,.side .foot,.side button kbd{display:none}
+    .side button{width:auto;white-space:nowrap}
+    .term{padding:16px 14px}
+    .fetch,.proj,.grid2{grid-template-columns:1fr}
+    .ascii{display:none}
+    .kv{grid-template-columns:96px 1fr}
+    .tbl .hide-m{display:none}
+    .tab:not(.on){display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="win">
+    <div class="bar">
+        <div class="dots"><i></i><i></i><i></i></div>
+        <div class="tabs"><span class="tab on" id="tab-title">lyam@dev: ~/portfolio</span></div>
+    </div>
+    <div class="body">
+        <nav class="side" id="side"></nav>
+        <div class="term" id="term"></div>
+    </div>
+</div>
+<div class="lightbox" id="lb"><img alt=""></div>
+
+<script type="module">
+import { PROFILE, SEARCH, EXPERIENCES, EDUCATION, SKILLS, SOFT_SKILLS, LANGUAGES, CERTIFICATIONS, PROJECTS, fullName, monthsUntilStart, monthsOfExperience } from '/data.js';
+import '/lab/cert-viewer.js';
+
+const term = document.getElementById('term');
+const PS1 = `<span class="ps1">lyam<span class="p">@</span>dev <span class="p">~/portfolio</span> <span class="g">(main)</span> $</span> `;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const chips = (items, hl = []) => items.map(t => `<span class="chip ${hl.includes(t) ? 'hl' : ''}">${esc(t)}</span>`).join('');
+const yrs = Math.floor(monthsOfExperience() / 12);
+// Fake but stable git-style hash for each experience id.
+const shortHash = s => [...s].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7).toString(16).padStart(7, '0').slice(0, 7);
+
+// Skill categories ordered for the dev angle.
+const devOrder = ['web', 'infra', 'db', 'auto', 'data', 'ai'];
+const skillsDev = [...SKILLS].sort((a, b) => devOrder.indexOf(a.id) - devOrder.indexOf(b.id));
+const maxItems = Math.max(...SKILLS.map(s => s.items.length));
+
+const COMMANDS = {
+    help: () => `<h2 class="sec">commandes disponibles</h2><table class="tbl">${[
+        ['whoami', 'qui je suis'], ['recherche', "l'alternance que je cherche"], ['skills', 'hard skills par catégorie'],
+        ['projets', 'projets déployés'], ['experiences', 'historique pro (git log)'], ['formations', 'parcours scolaire'],
+        ['soft-skills', 'savoir-être'], ['certs', 'certifications (cliquables)'], ['langues', 'langues parlées'],
+        ['contact', 'me joindre'], ['open &lt;projet&gt;', 'ouvrir un projet en ligne'], ['mail', 'écrire un email'], ['clear', "vider l'écran"],
+    ].map(([c, d]) => `<tr><td class="c-green">${c}</td><td class="sub">${d}</td></tr>`).join('')}</table>`,
+
+    whoami: () => `<div class="fetch">
+<div class="ascii">  ██╗     ███╗   ███╗
+  ██║     ████╗ ████║
+  ██║     ██╔████╔██║
+  ██║     ██║╚██╔╝██║
+  ███████╗██║ ╚═╝ ██║
+  ╚══════╝╚═╝     ╚═╝</div>
+<div><h1>${esc(fullName)}<span>_</span></h1><p class="sub" style="margin-bottom:10px">${esc(PROFILE.pitch.dev)}</p>
+<dl class="kv">
+<dt>role</dt><dd>${esc(PROFILE.title)}</dd>
+<dt>poste</dt><dd>${esc(EXPERIENCES[0].role)} @ <a href="${EXPERIENCES[0].companyUrl}" target="_blank" rel="noopener">${esc(EXPERIENCES[0].company)}</a></dd>
+<dt>école</dt><dd>${esc(EDUCATION.find(e => e.current).title)} — ${esc(EDUCATION.find(e => e.current).school)}</dd>
+<dt>xp pro</dt><dd>${yrs} ans+ (alternance &amp; freelance)</dd>
+<dt>stack</dt><dd>Node.js · TypeScript · Python · Docker</dd>
+<dt>uptime</dt><dd>dispo en alternance dans <span class="c-yellow">${monthsUntilStart()} mois</span> (${esc(SEARCH.start)})</dd>
+<dt>shell</dt><dd><a href="${PROFILE.github}" target="_blank" rel="noopener">github.com/${PROFILE.githubHandle}</a></dd>
+</dl><div class="palette">${['--red', '--peach', '--yellow', '--green', '--teal', '--blue', '--mauve', '--pink'].map(v => `<i style="background:var(${v})"></i>`).join('')}</div></div></div>`,
+
+    recherche: () => `<h2 class="sec"># recherche.md</h2><dl class="kv">
+<dt>contrat</dt><dd class="c-yellow">${esc(SEARCH.contract)} — ${esc(SEARCH.duration)}</dd>
+<dt>formation</dt><dd>${esc(SEARCH.program)} (${esc(SEARCH.level)}) — ${esc(SEARCH.school)}</dd>
+<dt>début</dt><dd>${esc(SEARCH.start)}</dd>
+${SEARCH.rhythm ? `<dt>rythme</dt><dd>${esc(SEARCH.rhythm)}</dd>` : ''}
+<dt>missions</dt><dd>${chips(SEARCH.domains)}</dd>
+<dt>zone</dt><dd>${esc(SEARCH.region)} — ${SEARCH.cities.map(esc).join(', ')}</dd></dl>`,
+
+    skills: () => `<h2 class="sec">$ skills --all --sort=dev</h2><table class="tbl">
+<tr><th>catégorie</th><th class="hide-m">n</th><th>outils</th></tr>
+${skillsDev.map(c => `<tr><td class="${c.focus.includes('dev') ? 'c-green' : 'sub'}" style="white-space:nowrap">${esc(c.name)}</td>
+<td class="hide-m" style="white-space:nowrap"><span class="bar-s" style="width:${c.items.length / maxItems * 60}px;${c.focus.includes('dev') ? '' : 'background:var(--overlay)'}"></span> <span class="muted">${c.items.length}</span></td>
+<td>${chips(c.items, c.focus.includes('dev') ? c.items : [])}</td></tr>`).join('')}</table>`,
+
+    projets: () => `<h2 class="sec">$ ls -l projets/ <span class="muted">— ${PROJECTS.length} en production</span></h2>${PROJECTS.map(p => `
+<div class="proj"><div><img src="${p.thumbnail}" alt="${esc(p.name)}" data-zoom="${p.thumbnail}">
+<div class="thumbs">${p.images.map(i => `<img src="${i}" alt="" loading="lazy" data-zoom="${i}">`).join('')}</div></div>
+<div><h3>${esc(p.name)}${p.badges.map((b, i) => `<span class="badge ${['c-green', 'c-peach', 'c-mauve'][i]}">${esc(b)}</span>`).join('')}</h3>
+<p class="c-teal" style="margin:2px 0 6px">// ${esc(p.angles.dev)}</p>
+<p class="sub">${esc(p.description)}</p>
+<ul>${p.highlights.map(h => `<li>${esc(h)}</li>`).join('')}</ul>
+<div>${chips(p.tags)}</div>
+<p style="margin-top:8px"><span class="muted">$ </span><a href="${p.url}" target="_blank" rel="noopener">open ${p.url.replace('https://', '')} ↗</a></p></div></div>`).join('')}`,
+
+    experiences: () => `<h2 class="sec">$ git log --graph experiences</h2>${EXPERIENCES.map((e, i) => `
+<div class="commit"><span class="graph">*${'\n|'.repeat(Math.max(1, e.points.length))}</span><div>
+<div><span class="hash">${shortHash(e.id)}</span> ${!e.end ? '<span class="refs">(HEAD -&gt; en cours)</span> ' : ''}<b>${esc(e.role)}</b></div>
+<div class="muted">${esc(e.company)}${e.companyDesc ? ' — ' + esc(e.companyDesc) : ''} · ${esc(e.place)} · ${esc(e.type)} · ${esc(e.period)}</div>
+${e.points.length ? `<ul>${e.points.map(p => `<li>${esc(p)}</li>`).join('')}</ul>` : ''}
+${e.tags.length ? `<div style="margin-top:4px">${chips(e.tags)}</div>` : ''}</div></div>`).join('')}`,
+
+    formations: () => `<h2 class="sec">$ cat formations.txt</h2><table class="tbl">
+<tr><th>période</th><th>diplôme</th><th class="hide-m">école</th></tr>
+${EDUCATION.map(e => `<tr><td class="${e.upcoming ? 'c-yellow' : e.current ? 'c-green' : 'sub'}" style="white-space:nowrap">${esc(e.period)}</td>
+<td><b>${esc(e.title)}</b> <span class="muted">(${esc(e.level)})</span>${e.upcoming ? ' <span class="c-yellow">← visé</span>' : e.current ? ' <span class="c-green">← en cours</span>' : ''}<br><span class="sub">${esc(e.desc)}</span></td>
+<td class="hide-m sub">${esc(e.school)}</td></tr>`).join('')}</table>`,
+
+    'soft-skills': () => `<h2 class="sec">$ cat soft-skills.yml</h2><div class="grid2">${SOFT_SKILLS.map(s =>
+        `<div><span class="c-mauve">${esc(s.name)}</span><span class="muted">:</span> <span class="sub">${esc(s.desc)}</span></div>`).join('')}</div>`,
+
+    certs: () => `<h2 class="sec">$ ls certifications/ <span class="muted">— cliquer pour ouvrir</span></h2><table class="tbl">
+<tr><th>fournisseur</th><th>certification</th><th class="hide-m">format</th></tr>
+${CERTIFICATIONS.map(c => `<tr><td class="${c.provider === 'Kaggle' ? 'c-teal' : 'c-peach'}">${c.provider}</td>
+<td><span class="cert" data-cert="${c.file}">${esc(c.name)}</span></td><td class="hide-m muted">${c.file.split('.').pop()}</td></tr>`).join('')}</table>`,
+
+    langues: () => `<h2 class="sec">$ locale -a</h2><table class="tbl">${LANGUAGES.map(l => `<tr>
+<td style="white-space:nowrap">${esc(l.name)}</td><td class="c-green" style="white-space:nowrap">${'█'.repeat(Math.floor(l.level * 2))}${'░'.repeat(10 - Math.floor(l.level * 2))}</td>
+<td class="c-yellow">${esc(l.cefr)}</td><td class="sub hide-m">${esc(l.desc)}</td></tr>`).join('')}</table>`,
+
+    contact: () => `<h2 class="sec">$ contact</h2><dl class="kv">
+<dt>email</dt><dd><a href="mailto:${PROFILE.email}">${PROFILE.email}</a></dd>
+<dt>tél</dt><dd><a href="${PROFILE.phoneHref}">${PROFILE.phone}</a></dd>
+<dt>github</dt><dd><a href="${PROFILE.github}" target="_blank" rel="noopener">${PROFILE.github.replace('https://', '')}</a></dd>
+<dt>linkedin</dt><dd><a href="${PROFILE.linkedin}" target="_blank" rel="noopener">linkedin.com/in/lyam-mafray-lizé</a></dd>
+${PROFILE.cv ? `<dt>cv</dt><dd><a href="${PROFILE.cv}" download>télécharger le CV (PDF)</a></dd>` : ''}
+<dt>autres</dt><dd><a href="https://ai.lyamml.fr">ai.lyamml.fr</a> · <a href="https://data.lyamml.fr">data.lyamml.fr</a> · <a href="https://lyamml.fr">lyamml.fr</a></dd></dl>`,
+
+    mail: () => { location.href = `mailto:${PROFILE.email}`; return `<span class="muted">ouverture du client mail…</span>`; },
+};
+
+// One "page" per command; the sidebar switches between them like terminal sessions.
+const PAGES = ['whoami', 'recherche', 'skills', 'projets', 'experiences', 'formations', 'soft-skills', 'certs', 'langues', 'contact'];
+
+function run(input) {
+    const [name, ...args] = input.trim().split(/\s+/);
+    if (!name || name === 'clear') return '';
+    if (name === 'open') {
+        const p = PROJECTS.find(p => p.id === (args[0] || '').toLowerCase() || p.name.toLowerCase() === args.join(' ').toLowerCase());
+        if (!p) return `<span class="c-red">open: projet inconnu</span> <span class="muted">— essayez ${PROJECTS.map(p => p.id).join(', ')}</span>`;
+        window.open(p.url, '_blank', 'noopener');
+        return `<span class="muted">ouverture de ${p.url}…</span>`;
+    }
+    const fn = COMMANDS[name];
+    return fn ? fn(args) : `<span class="c-red">zsh: command not found: ${esc(name)}</span> <span class="muted">— tapez</span> <span class="c-green">help</span>`;
+}
+
+const side = document.getElementById('side');
+side.innerHTML = `<h6>Sessions</h6>${PAGES.map((p, i) => `<button data-page="${p}"><kbd>${(i + 1) % 10}</kbd>${p}</button>`).join('')}
+<div class="foot">← → pour naviguer<br>1–0 pour sauter<br><span class="c-green">help</span> pour les commandes</div>`;
+
+const cmdHistory = [];
+let hIdx = 0, token = 0, current = null;
+
+// Clear the screen, type the command quickly, print its output, then a fresh prompt.
+async function go(cmd, { focus = false } = {}) {
+    const my = ++token;
+    current = cmd.trim();
+    const name = current.split(/\s+/)[0];
+    side.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.page === name));
+    document.getElementById('tab-title').textContent = `lyam@dev: ~/portfolio — ${name || 'zsh'}`;
+    if (PAGES.includes(name)) history.replaceState(null, '', '#' + name);
+
+    term.innerHTML = `<div class="line">${PS1}<span class="cmd"></span><span class="caret"></span></div>`;
+    term.scrollTop = 0;
+    const span = term.querySelector('.cmd');
+    for (const ch of current) {
+        if (my !== token) return;
+        span.textContent += ch;
+        await new Promise(r => setTimeout(r, 14));
+    }
+    if (my !== token) return;
+    term.querySelector('.caret').remove();
+    const html = run(current);
+    const idx = PAGES.indexOf(name);
+    const prev = PAGES[idx - 1], next = PAGES[idx + 1];
+    term.insertAdjacentHTML('beforeend', `<div class="out">${html}</div>
+${idx >= 0 ? `<div class="pager">${prev ? `<button data-go="${prev}">← ${prev}</button>` : '<span></span>'}${next ? `<button data-go="${next}">${next} →</button>` : ''}</div>` : ''}
+<div class="input-row" style="margin-top:18px">${PS1}<input id="in" autocomplete="off" spellcheck="false" aria-label="Commande" placeholder="tapez une commande (help)"></div>
+<div class="hints">${['help', 'open menucash', 'open jvfindings', 'mail'].map(c => `<button data-go="${c}">${c}</button>`).join('')}</div>`);
+    const input = term.querySelector('#in');
+    input.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && input.value.trim()) { cmdHistory.push(input.value); hIdx = cmdHistory.length; go(input.value, { focus: true }); }
+        else if (e.key === 'ArrowUp' && hIdx > 0) { input.value = cmdHistory[--hIdx]; e.preventDefault(); }
+        else if (e.key === 'Tab') {
+            e.preventDefault();
+            const m = Object.keys(COMMANDS).concat('open', 'clear').find(k => k.startsWith(input.value));
+            if (m) input.value = m;
+        }
+    });
+    if (focus) input.focus({ preventScroll: true });
+}
+
+side.addEventListener('click', e => { const b = e.target.closest('[data-page]'); if (b) go(b.dataset.page); });
+term.addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) go(b.dataset.go); });
+addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' && e.target.value) return;
+    const idx = PAGES.indexOf((current || '').split(/\s+/)[0]);
+    if (e.key === 'ArrowRight' && PAGES[idx + 1]) go(PAGES[idx + 1]);
+    else if (e.key === 'ArrowLeft' && idx > 0) go(PAGES[idx - 1]);
+    else if (/^[0-9]$/.test(e.key) && e.target.tagName !== 'INPUT') go(PAGES[(+e.key + 9) % 10]);
+});
+
+go(PAGES.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'whoami');
+
+// Screenshot lightbox
+const lb = document.getElementById('lb');
+term.addEventListener('click', e => {
+    const z = e.target.closest('[data-zoom]');
+    if (z) { lb.querySelector('img').src = z.dataset.zoom; lb.classList.add('on'); }
+});
+lb.addEventListener('click', () => lb.classList.remove('on'));
+</script>
+<script type="module" src="/lab-switcher.js"></script>
+</body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lyam Mafray-Lizé — data</title>
+<meta name="description" content="Portfolio data de Lyam Mafray-Lizé : Python, Pandas, SQL, Machine Learning. Alternance Mastère IA & Data 2027, EPSI Rennes.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+    --bg:#f5f5f2; --panel:#fff; --line:#e3e2dc; --ink:#1f2328; --muted:#6e7781; --code-bg:#f8f8f6;
+    --orange:#f37626; --blue:#0b62d6; --green:#1a7f37; --purple:#8250df; --red:#cf222e; --str:#0a3069; --teal:#0f8b8d;
+    --c1:#2a6fdb; --c2:#e8743b; --c3:#19a979; --c4:#945ecf; --c5:#ed4a7b; --c6:#13a4b4;
+    --mono:'JetBrains Mono',monospace; --sans:'IBM Plex Sans',system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:100px}
+body{background:var(--bg);color:var(--ink);font:400 15px/1.6 var(--sans)}
+a{color:var(--blue)}
+
+.top{position:sticky;top:0;z-index:10;background:var(--panel);border-bottom:1px solid var(--line)}
+.top-1{display:flex;align-items:center;gap:14px;height:46px;padding:0 16px}
+.logo{width:26px;height:26px;border-radius:6px;background:var(--orange);display:grid;place-items:center;color:#fff;font:700 12px var(--mono)}
+.fname{font:500 14px var(--mono)}
+.kernel{margin-left:auto;display:flex;align-items:center;gap:8px;font:500 12px var(--mono);color:var(--muted)}
+.kernel i{width:10px;height:10px;border-radius:50%;border:2px solid var(--green);background:var(--green)}
+.kernel.busy i{background:transparent}
+.top-2{display:flex;gap:4px;padding:6px 12px;border-top:1px solid var(--line);font:500 13px var(--sans);overflow-x:auto}
+.top-2 button,.top-2 a{border:0;background:none;padding:5px 10px;border-radius:5px;cursor:pointer;color:var(--ink);text-decoration:none;font:inherit;white-space:nowrap}
+.top-2 button:hover,.top-2 a:hover{background:var(--bg)}
+.top-2 .run{background:var(--ink);color:#fff}
+
+.layout{display:grid;grid-template-columns:230px minmax(0,1fr);max-width:1200px;margin:0 auto}
+.side{position:sticky;top:94px;height:calc(100vh - 94px);padding:22px 14px;border-right:1px solid var(--line);font-size:13px;overflow-y:auto}
+.side h6{font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.side a{display:block;color:var(--ink);text-decoration:none;padding:3px 8px;border-radius:5px}
+.side a:hover{background:var(--panel)}
+.side .vars{margin-top:24px;font:12px/1.9 var(--mono)}
+#vars > div{display:flex;justify-content:space-between;gap:8px;border-bottom:1px dotted var(--line)}
+.side .vars span{color:var(--purple)}
+.side .vars b{font-weight:500;color:var(--muted)}
+
+.nb{padding:26px 30px 120px;min-width:0}
+.cell{display:grid;grid-template-columns:64px minmax(0,1fr);gap:8px;margin-bottom:12px;border-left:3px solid transparent;padding-left:4px}
+.cell.active{border-left-color:var(--blue)}
+.prompt{font:12px/1 var(--mono);color:var(--blue);text-align:right;padding-top:12px;white-space:nowrap}
+.src{background:var(--code-bg);border:1px solid var(--line);border-radius:6px;padding:10px 14px 10px 48px;font:13px/1.65 var(--mono);overflow-x:auto;white-space:pre;position:relative;cursor:pointer;transition:border-color .15s}
+.src:hover,.src:focus{border-color:#9ec1f5;outline:0}
+.play{position:absolute;left:10px;top:8px;width:26px;height:26px;border-radius:50%;border:1px solid var(--line);background:var(--panel);color:var(--blue);font-size:10px;display:grid;place-items:center;transition:background .15s,color .15s}
+.src:hover .play{background:var(--blue);color:#fff;border-color:var(--blue)}
+.cell.done .play{color:var(--green)}
+.hint{display:flex;align-items:center;gap:10px;background:#eef4ff;border:1px solid #c8dafc;color:#0b3d91;border-radius:8px;padding:10px 14px;font-size:14px;margin:14px 0 4px}
+.hint kbd{font:12px var(--mono);background:#fff;border:1px solid #c8dafc;border-radius:4px;padding:0 5px}
+.k{color:var(--red)} .f{color:var(--purple)} .s{color:var(--str)} .n{color:var(--blue)} .c{color:var(--muted);font-style:italic}
+.output{grid-column:2;min-width:0;padding:6px 0 4px}
+.output.pending{display:none}
+.output{animation:outIn .35s ease}
+@keyframes outIn{from{opacity:0;transform:translateY(-4px)}}
+.md{grid-column:2}
+.md h1{font:700 42px/1.1 var(--sans);letter-spacing:-.02em;margin:6px 0 10px}
+.md h1 span{color:var(--orange)}
+.md h2{font:600 25px/1.2 var(--sans);margin:30px 0 4px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.md p{color:#3d444d;max-width:72ch}
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.badge{display:inline-flex;font:500 11.5px var(--mono);border-radius:4px;overflow:hidden;border:1px solid var(--line)}
+.badge b{background:#555;color:#fff;padding:2px 7px;font-weight:500}
+.badge span{background:var(--panel);padding:2px 7px}
+.stdout{font:13px/1.7 var(--mono);white-space:pre-wrap}
+.df-wrap{overflow-x:auto}
+table.df{border-collapse:collapse;font:13px var(--sans);min-width:100%}
+.df th,.df td{text-align:left;padding:6px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.df thead th{font-weight:600;border-bottom:2px solid var(--ink);white-space:nowrap}
+.df tbody tr:nth-child(odd){background:#fafaf8}
+.df tbody tr:hover{background:#eef4ff}
+.df td:first-child{color:var(--muted);font:12px var(--mono)}
+.df .num{text-align:right;font-family:var(--mono)}
+.df button{background:none;border:0;color:var(--blue);font:inherit;cursor:pointer;text-decoration:underline}
+.shape{font:12px var(--mono);color:var(--muted);margin-top:4px}
+.fig{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px 16px}
+.fig svg{width:100%;height:auto;display:block;font-family:'IBM Plex Sans',sans-serif}
+.fig .title{font:600 13px var(--sans);margin-bottom:6px}
+.figs2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.proj-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.proj{background:var(--panel);border:1px solid var(--line);border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
+.proj img{width:100%;aspect-ratio:16/9;object-fit:cover;object-position:top;display:block;border-bottom:1px solid var(--line)}
+.proj .b{padding:12px 16px 16px}
+.proj h4{font:600 17px var(--sans);display:flex;justify-content:space-between}
+.proj .angle{font:500 12.5px var(--mono);color:var(--teal);margin:2px 0 6px}
+.proj p{font-size:13.5px;color:#57606a}
+.proj ul{font-size:13px;color:#57606a;padding-left:18px;margin:6px 0}
+.proj code{font:11.5px var(--mono);background:var(--bg);padding:1px 6px;border-radius:3px;margin:0 4px 4px 0;display:inline-block}
+.links{display:flex;flex-wrap:wrap;gap:10px}
+.links a{font:500 14px var(--mono);border:1px solid var(--line);background:var(--panel);padding:8px 14px;border-radius:6px;text-decoration:none;color:var(--ink)}
+.links a:hover{border-color:var(--blue);color:var(--blue)}
+.links a.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+@media (max-width:860px){
+    .layout{grid-template-columns:1fr}
+    .side{display:none}
+    .nb{padding:18px 12px 110px}
+    .cell{grid-template-columns:1fr}
+    .prompt{text-align:left;padding:0}
+    .output,.md{grid-column:1}
+    .proj-grid,.figs2{grid-template-columns:1fr}
+    .md h1{font-size:32px}
+}
+</style>
+</head>
+<body>
+<header class="top">
+    <div class="top-1"><div class="logo">LM</div><span class="fname">lyam_mafray-lize.ipynb</span>
+        <span class="kernel" id="kernel"><i></i><span id="klabel">Python 3 (pandas)</span></span></div>
+    <div class="top-2">
+        <button class="run" id="run-all">▶▶ Exécuter tout</button>
+        <a href="mailto:ly.mafraylize@gmail.com">✉ Contacter</a>
+        <a href="https://github.com/LyamML" target="_blank" rel="noopener">GitHub ↗</a>
+        <a href="https://www.linkedin.com/in/lyam-mafray-lizé-a5954a235/" target="_blank" rel="noopener">LinkedIn ↗</a>
+    </div>
+</header>
+<div class="layout">
+    <aside class="side"><h6>Sommaire</h6><div id="toc"></div><div class="vars"><h6>Variables</h6><div id="vars"></div></div></aside>
+    <main class="nb" id="nb"></main>
+</div>
+
+<script type="module">
+import { PROFILE, SEARCH, EXPERIENCES, EDUCATION, SKILLS, SOFT_SKILLS, LANGUAGES, CERTIFICATIONS, PROJECTS, fullName, monthsUntilStart, monthsOfExperience } from '/data.js';
+import '/lab/cert-viewer.js';
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const COLORS = ['#2a6fdb', '#e8743b', '#19a979', '#945ecf', '#ed4a7b', '#13a4b4'];
+const nb = document.getElementById('nb');
+
+// DataFrame-like HTML table
+function df(cols, rows, { numeric = [] } = {}) {
+    return `<div class="df-wrap"><table class="df"><thead><tr><th></th>${cols.map(c => `<th class="${numeric.includes(c) ? 'num' : ''}">${c}</th>`).join('')}</tr></thead>
+<tbody>${rows.map((r, i) => `<tr><td>${i}</td>${r.map((v, j) => `<td class="${numeric.includes(cols[j]) ? 'num' : ''}">${v}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
+<div class="shape">${rows.length} rows × ${cols.length} columns</div>`;
+}
+
+// ── Charts (plain SVG, computed from data.js) ────────────────
+const ym = s => { const [y, m] = s.split('-').map(Number); return y + (m - 1) / 12; };
+function gantt() {
+    const now = new Date(), nowY = now.getFullYear() + now.getMonth() / 12;
+    const rows = [
+        ...EDUCATION.map(e => ({ label: e.title.replace(/\s*\(.*\)/, '').replace(' — Mention Bien', ''), s: ym(e.start), e: ym(e.end), kind: e.upcoming ? 'visé' : 'formation' })),
+        ...EXPERIENCES.map(e => ({ label: `${e.company}`, s: ym(e.start), e: e.end ? ym(e.end) : nowY, kind: e.type.toLowerCase(), live: !e.end })),
+    ].sort((a, b) => a.s - b.s);
+    const x0 = 2020.6, x1 = 2029.8, L = 210, R = 760, rowH = 26, top = 10;
+    const X = v => L + (v - x0) / (x1 - x0) * (R - L);
+    const col = { formation: '#2a6fdb', alternance: '#19a979', freelance: '#945ecf', 'visé': '#e8743b' };
+    let s = `<svg viewBox="0 0 780 ${top + rows.length * rowH + 40}" font-size="11.5">`;
+    for (let y = 2021; y <= 2029; y++) s += `<line x1="${X(y)}" x2="${X(y)}" y1="${top}" y2="${top + rows.length * rowH}" stroke="#eee"/><text x="${X(y)}" y="${top + rows.length * rowH + 16}" text-anchor="middle" fill="#6e7781">${y}</text>`;
+    rows.forEach((r, i) => {
+        const y = top + i * rowH;
+        s += `<text x="${L - 10}" y="${y + 16}" text-anchor="end" fill="#1f2328">${esc(r.label.length > 30 ? r.label.slice(0, 29) + '…' : r.label)}</text>`;
+        s += `<rect x="${X(r.s)}" y="${y + 5}" width="${Math.max(4, X(r.e) - X(r.s))}" height="15" rx="3" fill="${col[r.kind]}" ${r.kind === 'visé' ? 'fill-opacity=".35" stroke="#e8743b" stroke-dasharray="3 2"' : ''}/>`;
+        if (r.live) s += `<circle cx="${X(r.e)}" cy="${y + 12.5}" r="4" fill="#fff" stroke="${col[r.kind]}" stroke-width="2"/>`;
+    });
+    s += `<line x1="${X(nowY)}" x2="${X(nowY)}" y1="${top - 4}" y2="${top + rows.length * rowH}" stroke="#cf222e" stroke-dasharray="4 3"/><text x="${X(nowY) + 4}" y="${top + 4}" fill="#cf222e" font-size="10.5">aujourd'hui</text>`;
+    const lg = Object.entries(col); s += lg.map(([k, c], i) => `<rect x="${L + i * 110}" y="${top + rows.length * rowH + 26}" width="10" height="10" rx="2" fill="${c}"/><text x="${L + i * 110 + 14}" y="${top + rows.length * rowH + 35}" fill="#6e7781">${k}</text>`).join('');
+    return s + '</svg>';
+}
+function hbar(items, { max, fmt = v => v, color = i => COLORS[i % 6], w = 360 } = {}) {
+    const L = 150, rowH = 26, M = max ?? Math.max(...items.map(d => d.v));
+    let s = `<svg viewBox="0 0 ${w + 40} ${items.length * rowH + 6}" font-size="12">`;
+    items.forEach((d, i) => {
+        const bw = (d.v / M) * (w - L);
+        s += `<text x="${L - 8}" y="${i * rowH + 17}" text-anchor="end" fill="#1f2328">${esc(d.k)}</text>`;
+        s += `<rect x="${L}" y="${i * rowH + 5}" width="${bw}" height="16" rx="2" fill="${color(i, d)}"/>`;
+        s += `<text x="${L + bw + 6}" y="${i * rowH + 17}" fill="#6e7781" font-family="JetBrains Mono" font-size="11">${fmt(d.v)}</text>`;
+    });
+    return s + '</svg>';
+}
+
+// ── Notebook cells ────────────────────────────────────────────
+const cells = [];
+const md = html => cells.push({ md: html });
+const code = (src, out) => cells.push({ src, out });
+const S = s => `<span class="s">${s}</span>`, F = s => `<span class="f">${s}</span>`, K = s => `<span class="k">${s}</span>`, C = s => `<span class="c">${s}</span>`, N = s => `<span class="n">${s}</span>`;
+
+md(`<h1>${esc(fullName)}<span>.</span></h1><p>${esc(PROFILE.pitch.data)}</p>
+<div class="badges"><span class="badge"><b>alternance</b><span>${esc(SEARCH.start.toLowerCase())}</span></span><span class="badge"><b>visé</b><span>${esc(SEARCH.program)}</span></span>
+<span class="badge"><b>actuel</b><span>${esc(EXPERIENCES[0].company)}</span></span><span class="badge"><b>certifs</b><span>${CERTIFICATIONS.length}</span></span><span class="badge"><b>kernel</b><span>pandas</span></span></div>`);
+
+code(`${K('import')} pandas ${K('as')} pd
+${K('from')} lyam ${K('import')} load
+
+lyam = ${F('load')}(${S('"portfolio"')})
+lyam.recherche`, () => `<div class="stdout">{
+  ${Object.entries({ contrat: `${SEARCH.contract} — ${SEARCH.duration}`, formation: `${SEARCH.program} (${SEARCH.level})`, ecole: SEARCH.school, debut: SEARCH.start, ...(SEARCH.rhythm ? { rythme: SEARCH.rhythm } : {}), zone: SEARCH.cities.join(', ') })
+    .map(([k, v]) => `${S(`'${k}'`)}: ${S(`'${esc(v)}'`)}`).join(',\n  ')},
+  ${S(`'missions'`)}: [${SEARCH.domains.map(d => S(`'${esc(d)}'`)).join(', ')}],
+  ${S(`'mois_avant_rentree'`)}: ${N(monthsUntilStart())},
+}</div>`);
+
+md(`<h2 id="s-projets">1. Projets en production</h2><p>Deux produits déployés, avec leurs captures d'écran.</p>`);
+code(`${K('for')} p ${K('in')} lyam.projets:
+    ${F('display')}(p)`, () => `<div class="proj-grid">${PROJECTS.map(p => `<div class="proj"><img src="${p.thumbnail}" alt="${esc(p.name)}">
+<div class="b"><h4>${esc(p.name)} <a href="${p.url}" target="_blank" rel="noopener">↗</a></h4><div class="angle">${esc(p.badges.join(' · '))} — ${esc(p.angles.data)}</div>
+<p>${esc(p.description)}</p><ul>${p.highlights.map(h => `<li>${esc(h)}</li>`).join('')}</ul>${p.tags.map(t => `<code>${esc(t)}</code>`).join('')}</div></div>`).join('')}</div>`);
+
+md(`<h2 id="s-parcours">2. Parcours</h2>`);
+code(`exp = pd.${F('DataFrame')}(lyam.experiences)
+exp[[${S('"periode"')}, ${S('"poste"')}, ${S('"entreprise"')}, ${S('"type"')}, ${S('"missions"')}]]`,
+    () => df(['periode', 'poste', 'entreprise', 'type', 'missions'], EXPERIENCES.map(e => [
+        esc(e.period), `<b>${esc(e.role)}</b>`, `${esc(e.company)}${e.companyDesc ? `<br><span style="color:#6e7781">${esc(e.companyDesc)}</span>` : ''}`, esc(e.type),
+        e.points.length ? e.points.map(esc).join('<br>') : '<span style="color:#6e7781">NaN</span>']) ));
+code(`edu = pd.${F('DataFrame')}(lyam.formations)
+edu`, () => df(['periode', 'diplome', 'niveau', 'ecole', 'details'], EDUCATION.map(e => [
+    esc(e.period), `<b>${esc(e.title)}</b>${e.current ? ' <span style="color:#1a7f37">● en cours</span>' : e.upcoming ? ' <span style="color:#e8743b">◌ visé</span>' : ''}`, esc(e.level), esc(e.school), esc(e.desc)])));
+code(`pd.${F('concat')}([exp, edu]).${F('plot')}.${F('gantt')}(x=[${S('"debut"')}, ${S('"fin"')}], title=${S('"Timeline"')})`,
+    () => `<div class="fig"><div class="title">Timeline — formations &amp; expériences</div>${gantt()}</div>`);
+
+md(`<h2 id="s-skills">3. Compétences</h2>`);
+code(`skills = lyam.skills.${F('explode')}(${S('"items"')})
+skills.${F('groupby')}(${S('"categorie"')}).${F('size')}().${F('sort_values')}().${F('plot')}.${F('barh')}()`,
+    () => `<div class="fig"><div class="title">Nombre d'outils par catégorie (n = ${SKILLS.reduce((n, c) => n + c.items.length, 0)})</div>${hbar([...SKILLS].sort((a, b) => b.items.length - a.items.length).map(c => ({ k: c.name, v: c.items.length })), { w: 620 })}</div>`);
+code(`skills.${F('groupby')}(${S('"categorie"')})[${S('"items"')}].${F('agg')}(${S('", "')}.join)`,
+    () => df(['categorie', 'n', 'items'], [...SKILLS].sort((a, b) => (b.focus.includes('data') - a.focus.includes('data'))).map(c => [
+        `<b>${esc(c.name)}</b>`, c.items.length, c.items.map(i => esc(i)).join(', ')]), { numeric: ['n'] }));
+code(`pd.${F('DataFrame')}(lyam.soft_skills)`, () => df(['soft_skill', 'description'], SOFT_SKILLS.map(s => [`<b>${esc(s.name)}</b>`, esc(s.desc)])));
+
+md(`<h2 id="s-certifs">4. Certifications &amp; langues</h2>`);
+code(`certs = pd.${F('DataFrame')}(lyam.certifications)
+certs  ${C('# cliquer sur un nom pour ouvrir le certificat')}`,
+    () => df(['fournisseur', 'certification', 'theme', 'format'], CERTIFICATIONS.map(c => [esc(c.provider), `<button data-cert="${c.file}">${esc(c.name)}</button>`, esc(c.topic), c.file.split('.').pop()])));
+code(`fig, (ax1, ax2) = plt.${F('subplots')}(${N(1)}, ${N(2)})
+certs.${F('value_counts')}(${S('"theme"')}).${F('plot')}.${F('barh')}(ax=ax1)
+langues.${F('plot')}.${F('barh')}(x=${S('"langue"')}, y=${S('"niveau"')}, ax=ax2)`, () => {
+    const topics = Object.entries(CERTIFICATIONS.reduce((m, c) => (m[c.topic] = (m[c.topic] || 0) + 1, m), {})).map(([k, v]) => ({ k: { data: 'Data', ml: 'Machine Learning', ai: 'IA générative' }[k] || k, v }));
+    return `<div class="figs2"><div class="fig"><div class="title">Certifications par thème</div>${hbar(topics, { w: 340 })}</div>
+<div class="fig"><div class="title">Langues (échelle 0–5)</div>${hbar(LANGUAGES.map(l => ({ k: `${l.name}`, v: l.level, c: l.cefr })), { max: 5, w: 340, fmt: v => LANGUAGES.find(l => l.level === v).cefr, color: () => '#19a979' })}</div></div>`;
+});
+code(`langues`, () => df(['langue', 'cecrl', 'niveau', 'detail'], LANGUAGES.map(l => [esc(l.name), esc(l.cefr), l.level, esc(l.desc)]), { numeric: ['niveau'] }));
+
+md(`<h2 id="s-contact">5. Contact</h2>`);
+code(`lyam.${F('contacter')}()`, () => `<div class="links"><a class="primary" href="mailto:${PROFILE.email}">${PROFILE.email}</a><a href="${PROFILE.phoneHref}">${PROFILE.phone}</a>
+<a href="${PROFILE.linkedin}" target="_blank" rel="noopener">LinkedIn ↗</a><a href="${PROFILE.github}" target="_blank" rel="noopener">GitHub ↗</a>${PROFILE.cv ? `<a href="${PROFILE.cv}" download>CV ↓</a>` : ''}
+<a href="https://dev.lyamml.fr">dev.lyamml.fr</a><a href="https://ai.lyamml.fr">ai.lyamml.fr</a><a href="https://lyamml.fr">lyamml.fr</a></div>`);
+
+// ── Render: outputs stay hidden until the visitor runs the cell (click, ▶ or Shift+Entrée).
+nb.innerHTML = cells.map(c => c.md ? `<div class="cell"><div></div><div class="md">${c.md}</div></div>`
+    : `<div class="cell code"><div class="prompt">[ ]:</div><div class="src" tabindex="0" title="Exécuter (Shift+Entrée)"><span class="play">▶</span>${c.src}</div><div class="output pending">${c.out()}</div></div>`).join('');
+nb.querySelector('.md').insertAdjacentHTML('beforeend',
+    `<div class="hint">▶ Cliquez sur une cellule pour l'exécuter — <kbd>Shift</kbd>+<kbd>Entrée</kbd> enchaîne — ou « Exécuter tout » en haut.</div>`);
+
+document.getElementById('toc').innerHTML = [...nb.querySelectorAll('h2[id]')].map(h => `<a href="#${h.id}">${h.textContent}</a>`).join('');
+document.getElementById('vars').innerHTML = [
+    ['projets', `list[${PROJECTS.length}]`], ['experiences', `df ${EXPERIENCES.length}×5`], ['formations', `df ${EDUCATION.length}×5`],
+    ['skills', `${SKILLS.reduce((n, c) => n + c.items.length, 0)} items`], ['certs', `df ${CERTIFICATIONS.length}×4`], ['langues', `df ${LANGUAGES.length}×4`],
+    ['xp_mois', monthsOfExperience()], ['rentree', `J-${monthsUntilStart()}m`],
+].map(([k, v]) => `<div><span>${k}</span><b>${v}</b></div>`).join('');
+
+let counter = 0, busy = 0;
+const kernel = document.getElementById('kernel'), klabel = document.getElementById('klabel');
+function run(cell) {
+    if (cell.dataset.ran) return Promise.resolve();
+    cell.dataset.ran = 1;
+    const p = cell.querySelector('.prompt');
+    p.textContent = '[*]:'; cell.classList.add('active'); busy++; kernel.classList.add('busy'); klabel.textContent = 'Python 3 · occupé';
+    return new Promise(r => setTimeout(() => {
+        p.textContent = `[${++counter}]:`; cell.querySelector('.output').classList.remove('pending'); cell.classList.remove('active'); cell.classList.add('done');
+        if (!--busy) { kernel.classList.remove('busy'); klabel.textContent = 'Python 3 (pandas) · inactif'; }
+        r();
+    }, 300 + Math.random() * 300));
+}
+const codeCells = [...nb.querySelectorAll('.cell.code')];
+codeCells.forEach((c, i) => {
+    const src = c.querySelector('.src');
+    src.addEventListener('click', () => run(c));
+    src.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && e.shiftKey) { e.preventDefault(); run(c).then(() => codeCells[i + 1]?.querySelector('.src').focus()); }
+    });
+});
+document.getElementById('run-all').addEventListener('click', async () => { for (const c of codeCells) await run(c); });
+</script>
+<script type="module" src="/lab-switcher.js"></script>
+</body>
+</html>
