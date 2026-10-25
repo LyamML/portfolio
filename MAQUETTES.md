@@ -10,8 +10,8 @@ Idée retenue : plusieurs sous-domaines, chacun avec un angle, mais **chaque pag
 
 | Domaine | Angle | Maquette(s) retenue(s) |
 |---|---|---|
-| `lyamml.fr` | général + freelance | **INNOV B** (canvas infini) — candidate pour devenir la page d'accueil |
-| `dev.lyamml.fr` | développement | **DEV A** (terminal) · **DEV B** (IDE) |
+| `lyamml.fr` | général + freelance | **INNOV B** (canvas infini) — **page d'accueil** (`index.html`) |
+| `dev.lyamml.fr` | développement | **DEV A** (terminal) · **DEV B** (IDE) · **DEV C** (terminal à onglets + boot) |
 | `data.lyamml.fr` | data / ML | **DATA A** (notebook pandas) |
 | `ai.lyamml.fr` | LLMs / embeddings | à refaire (les maquettes IA ont été écartées) |
 | — | expérimental | **INNOV C** (typo cinétique + physique) |
@@ -27,11 +27,12 @@ Puis ouvrir (le port peut être 5173 ou 5174) :
 
 - `/dev/a.html` — terminal, une « session » par section dans la barre latérale (← → ou 1-0)
 - `/dev/b.html` — IDE : explorateur, onglets, `Ctrl+P`
+- `/dev/c.html` — terminal « lyam-os » : séquence de boot, vues au clavier (1-6, ↑↓), ligne de commande (`open menucash`, `grep python`, `crt`…), détail projet en second terminal, mode CRT. Variantes d'animations et de vues compétences dans `/dev/c-lab.html`
 - `/data/a.html` — notebook : les cellules s'exécutent au clic (ou `Shift+Entrée`, « Exécuter tout »)
-- `/x/b.html` — canvas infini : zones, zoom sémantique, visite guidée, recherche `Ctrl+K`, mode liste, aperçu live des projets, thème sombre
+- `/` (`index.html`) — INNOV B, canvas infini : zones, zoom sémantique, recherche `Ctrl+K`, mode liste, aperçu live des projets, thème sombre
 - `/x/c.html` — typo variable réactive au curseur, compétences en physique (Matter.js), projets en scroll horizontal
 
-Le site actuel (`index.html`, `projets.html`) n'a pas été modifié.
+L'ancien site est conservé : ancienne page d'accueil dans `ancien.html` (`/ancien`), page `projets.html` inchangée.
 
 ## Fichiers
 
@@ -39,6 +40,7 @@ Le site actuel (`index.html`, `projets.html`) n'a pas été modifié.
 - `lab/cert-viewer.js` — visionneuse partagée des certifications (PNG Kaggle / PDF DataCamp) via `data-cert`.
 - `lab-switcher.js` — barre de navigation entre maquettes, **à retirer** en production.
 - `dev/`, `data/`, `x/` — les maquettes.
+- `dev/c-data.js` — adaptateur de DEV C : relit `data.js` et ajoute ce qui est propre à cette maquette (familles de compétences, extraits de code, notions des certifs). `dev/c-term.js` — animations et vues compétences du terminal.
 - `.claude/launch.json` — config du serveur Vite pour l'app Claude.
 
 ## À compléter dans `data.js` (marqué TODO)
@@ -57,7 +59,7 @@ Le site actuel (`index.html`, `projets.html`) n'a pas été modifié.
 
 ## Pistes suivantes
 
-1. Faire d'INNOV B la page d'accueil (`index.html`) et retirer `lab-switcher.js`.
+1. ~~Faire d'INNOV B la page d'accueil~~ — fait : `x/b.html` → `index.html`, sans `lab-switcher.js`. Les liens « Autres versions » pointent vers des sous-domaines pas encore déployés.
 2. Créer une nouvelle maquette pour `ai.lyamml.fr`.
 3. Prévoir le build multi-pages / multi-sous-domaines (Vite `rollupOptions.input`, Nginx, Docker).
-4. Vérifier sur un vrai navigateur les animations (physique INNOV C, visite guidée INNOV B) et l'aperçu live en iframe des projets.
+4. Vérifier sur un vrai navigateur les animations (physique INNOV C) et l'aperçu live en iframe des projets.

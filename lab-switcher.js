@@ -1,13 +1,14 @@
 // Barre de navigation entre les maquettes de test.
 // Injectée en bas de chaque maquette, à supprimer une fois les designs choisis.
 const GROUPS = [
-    { id: 'dev',  label: 'Dev',   pages: [['a', 'Terminal'], ['b', 'IDE']] },
+    { id: 'dev',  label: 'Dev',   pages: [['a', 'Terminal'], ['b', 'IDE'], ['c', 'Terminal 2']] },
     { id: 'data', label: 'Data',  pages: [['a', 'Notebook']] },
     { id: 'x',    label: 'Innov', pages: [['b', 'Canvas'], ['c', 'Physique']] },
 ];
 
 const path = location.pathname;
-const href = (g, p) => `/${g}/${p}.html`;
+// INNOV B est devenue la page d'accueil (index.html).
+const href = (g, p) => g === 'x' && p === 'b' ? '/' : `/${g}/${p}.html`;
 
 const bar = document.createElement('nav');
 bar.className = 'lab-bar';

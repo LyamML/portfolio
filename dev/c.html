@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lyam Mafray-Lizé — Fullstack, IA & Data</title>
+<meta name="description" content="Concepteur-développeur d'applications Fullstack, IA & Data. En recherche d'alternance en Mastère Expert IA & Data pour septembre 2027.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root { --bg: #0d0c0a; --panel: #13120f; --fg: #e8dfcc; --dim: #8f8775; --faint: #3a362d; --amber: #ffb547; --red: #ff6b5b; --green: #8fd694; --cyan: #7cc7d6; --mono: 'JetBrains Mono', ui-monospace, monospace; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) { --bg: #efe9dc; --panel: #f7f3ea; --fg: #24211b; --dim: #6a6353; --faint: #d2c9b5; --amber: #a0590a; --red: #b8382a; --green: #2f7a3a; --cyan: #1f6f80; } }
+:root[data-theme="light"] { --bg: #efe9dc; --panel: #f7f3ea; --fg: #24211b; --dim: #6a6353; --faint: #d2c9b5; --amber: #a0590a; --red: #b8382a; --green: #2f7a3a; --cyan: #1f6f80; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: var(--mono); font-size: 14px; line-height: 1.65; display: flex; padding: 20px; }
+a { color: var(--cyan); text-decoration: none; }
+a:hover { text-decoration: underline; }
+button { font: inherit; color: inherit; }
+::selection { background: var(--amber); color: var(--bg); }
+
+.win { position: relative; flex: 1; display: grid; grid-template-columns: 250px 1fr; grid-template-rows: auto minmax(0, 1fr) auto; border: 1px solid var(--faint); background: var(--panel); min-height: 0; max-width: 1500px; margin: 0 auto; width: 100%; overflow: hidden; }
+.bar { grid-column: 1 / -1; display: flex; justify-content: space-between; padding: 8px 14px; border-bottom: 1px solid var(--faint); color: var(--dim); font-size: 12px; gap: 12px; }
+.bar b { color: var(--amber); font-weight: 500; }
+.bar .r { display: flex; gap: 14px; }
+.bar button { all: unset; cursor: pointer; }
+.bar button:hover, .bar button[aria-pressed="true"] { color: var(--amber); }
+#path::after { content: '▌'; color: var(--amber); animation: blink 1s steps(1) infinite; margin-left: 1px; }
+
+/* Arborescence */
+.tree { border-right: 1px solid var(--faint); padding: 16px 0; overflow: auto; display: flex; flex-direction: column; }
+.tree p { color: var(--dim); padding: 0 16px 8px; font-size: 12px; }
+.tree button { all: unset; display: block; padding: 3px 16px; cursor: pointer; white-space: pre; }
+.tree button .t { color: var(--faint); }
+.tree button:hover { background: color-mix(in srgb, var(--amber) 9%, transparent); }
+.tree button.on { background: var(--amber); color: var(--bg); }
+.tree button.on .t { color: var(--bg); opacity: .5; }
+.tree .key { float: right; color: var(--dim); font-size: 11px; }
+.tree button.on .key { color: var(--bg); }
+.who { margin-top: auto; padding: 16px; border-top: 1px solid var(--faint); font-size: 12px; color: var(--dim); }
+.who b { color: var(--fg); font-weight: 500; }
+.who .dot { color: var(--green); animation: pulse 2s ease-in-out infinite; }
+.who .n { color: var(--amber); display: block; margin-top: 10px; }
+@keyframes pulse { 50% { opacity: .35; } }
+
+/* Panneaux : vue principale + second terminal (split) */
+.panes { display: flex; min-width: 0; min-height: 0; position: relative; }
+.view { flex: 1 1 auto; overflow: auto; padding: 28px 36px 48px; min-width: 0; }
+.side { flex: 0 0 0%; min-width: 0; overflow: hidden; display: flex; flex-direction: column; position: relative; transition: flex-basis .5s cubic-bezier(.7,0,.2,1); }
+.side::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--amber); transform: scaleY(0); transform-origin: top; transition: transform .35s ease; z-index: 1; }
+.panes.split .side { flex-basis: 52%; }
+.panes.split .side::before { transform: scaleY(1); }
+.side-bar { display: flex; justify-content: space-between; gap: 10px; padding: 6px 14px 6px 16px; border-bottom: 1px solid var(--faint); font-size: 12px; color: var(--dim); white-space: nowrap; background: color-mix(in srgb, var(--amber) 6%, transparent); }
+.side-bar b { color: var(--amber); font-weight: 500; }
+.side-bar button { all: unset; cursor: pointer; }
+.side-bar button:hover { color: var(--red); }
+.side-body { flex: 1; overflow: auto; padding: 22px 24px 40px 26px; min-width: 340px; }
+.side-body h1 { font-size: clamp(26px, 3vw, 40px); }
+.shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 6px; }
+.shots button { all: unset; cursor: zoom-in; aspect-ratio: 16/10; border: 1px solid var(--faint); position: relative; overflow: hidden; background: var(--bg); }
+.shots button:hover, .shots button:focus-visible { border-color: var(--amber); }
+.shots img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; opacity: 0; transition: opacity .3s; }
+.shots img.ok { opacity: 1; }
+.shots .spin { position: absolute; inset: 0; display: grid; place-items: center; color: var(--dim); font-size: 12px; }
+
+/* Contenu */
+.view h1, .side h1 { font-size: clamp(28px, 4.2vw, 52px); line-height: 1.05; font-weight: 700; letter-spacing: -.02em; margin: 4px 0 6px; }
+.view h1.name { color: var(--amber); text-transform: uppercase; }
+.sub { font-size: clamp(16px, 1.8vw, 21px); margin-bottom: 18px; }
+.view h2, .side h2 { font-size: 13px; font-weight: 500; color: var(--amber); margin: 30px 0 10px; text-transform: uppercase; letter-spacing: .08em; }
+.view h2::before, .side h2::before { content: '## '; color: var(--faint); }
+.view p, .side p { max-width: 78ch; }
+.c { color: var(--dim); } .k { color: var(--red); } .s { color: var(--green); } .n { color: var(--amber); } .cy { color: var(--cyan); }
+.ph { color: var(--red); font-style: italic; }
+.cmd { color: var(--dim); margin-bottom: 8px; }
+.cmd b { color: var(--green); font-weight: 500; }
+.out { color: var(--dim); margin-bottom: 14px; }
+.ascii { color: var(--amber); font-size: 11px; line-height: 1.2; white-space: pre; margin-bottom: 14px; }
+.cursor { display: inline-block; width: .55em; height: 1em; background: var(--amber); vertical-align: -2px; animation: blink 1s steps(1) infinite; margin-left: 4px; }
+@keyframes blink { 50% { opacity: 0; } }
+
+table { border-collapse: collapse; width: 100%; max-width: 1000px; }
+td, th { text-align: left; padding: 7px 18px 7px 0; vertical-align: top; border-bottom: 1px dashed var(--faint); }
+th { color: var(--dim); font-weight: 400; font-size: 12px; }
+td.kc { color: var(--dim); white-space: nowrap; width: 1%; }
+.lines > div { white-space: pre-wrap; }
+.svc .dot { color: var(--green); }
+
+.plist tr.sel td { background: color-mix(in srgb, var(--amber) 10%, transparent); }
+.plist td strong { color: var(--fg); }
+.tag { font-size: 11px; padding: 0 6px; border: 1px solid currentColor; white-space: nowrap; }
+.vbtn { all: unset; cursor: pointer; color: var(--cyan); white-space: nowrap; border: 1px solid transparent; padding: 0 6px; }
+.vbtn:hover, .vbtn:focus-visible { border-color: var(--cyan); }
+.vbtn[aria-pressed="true"] { background: var(--cyan); color: var(--bg); }
+
+.log-entry { border-left: 2px solid var(--faint); padding: 2px 0 14px 16px; margin-left: 4px; max-width: 900px; }
+.log-entry.cur { border-color: var(--green); }
+.log-entry.nx { border-color: var(--amber); }
+.log-entry .h { display: flex; flex-wrap: wrap; gap: 4px 12px; }
+.log-entry strong { font-weight: 700; }
+.log-entry ul { list-style: none; margin-top: 4px; }
+.log-entry ul li::before { content: '│ '; color: var(--faint); }
+ul.plus { list-style: none; }
+ul.plus li::before { content: '+ '; color: var(--green); }
+
+.prompt { grid-column: 1 / -1; border-top: 1px solid var(--faint); display: flex; align-items: center; gap: 10px; padding: 10px 14px; }
+.prompt label { color: var(--green); white-space: nowrap; }
+.prompt input { all: unset; flex: 1; min-width: 0; color: var(--fg); caret-color: var(--amber); }
+.prompt .hint { color: var(--dim); font-size: 12px; white-space: nowrap; }
+
+/* Option CRT : scanlines, lueur, léger scintillement */
+.crt .win::after { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 30;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.18) 0 1px, transparent 1px 3px), radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,.35) 100%);
+  animation: flicker 4s infinite steps(1); }
+.crt .win { text-shadow: 0 0 6px color-mix(in srgb, var(--amber) 35%, transparent); }
+@keyframes flicker { 0%, 100% { opacity: 1; } 47% { opacity: .85; } 48% { opacity: 1; } 82% { opacity: .92; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+@media (max-width: 900px) {
+  body { padding: 0; }
+  .win { grid-template-columns: 1fr; grid-template-rows: auto auto minmax(0, 1fr) auto; border: 0; }
+  .tree { border-right: 0; border-bottom: 1px solid var(--faint); padding: 6px 0; flex-direction: row; overflow-x: auto; }
+  .tree p, .who, .tree .key, .tree .t { display: none; }
+  #files { display: flex; }
+  .tree button { padding: 4px 12px; }
+  .view { padding: 20px 16px 32px; }
+  /* Le second terminal recouvre l'écran en glissant depuis la droite */
+  .side { position: absolute; inset: 0; z-index: 5; background: var(--panel); flex-basis: auto; transform: translateX(100%); transition: transform .45s cubic-bezier(.7,0,.2,1); }
+  .panes.split .side { transform: none; }
+  .side-body { min-width: 0; padding: 18px 16px 32px; }
+  .shots { grid-template-columns: repeat(2, 1fr); }
+  td.kc { white-space: normal; }
+  .plist .hide-m { display: none; }
+  .prompt .hint, .bar .r .hide-m { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="win">
+  <div class="bar"><span><b>lyam@portfolio</b>:~$ <span id="path"></span></span>
+    <span class="r"><span class="hide-m">utf-8 · fr</span><button id="crt" type="button" aria-pressed="false">[crt]</button><button id="theme" type="button">[thème]</button></span></div>
+  <nav class="tree" aria-label="Fichiers">
+    <p>~/lyam</p>
+    <div id="files"></div>
+    <div class="who" id="who"></div>
+  </nav>
+  <div class="panes" id="panes">
+    <main class="view" id="view" tabindex="-1"></main>
+    <aside class="side" id="side" aria-label="Détail du projet">
+      <div class="side-bar"><span><b>[2]</b> <span id="side-title"></span></span><button id="side-close" type="button" aria-label="Fermer le panneau">[x] fermer</button></div>
+      <div class="side-body" id="side-body"></div>
+    </aside>
+  </div>
+  <form class="prompt" id="form" autocomplete="off">
+    <label for="cli">lyam@portfolio:~$</label>
+    <input id="cli" spellcheck="false" placeholder="tapez « help »">
+    <span class="hint">touches 1–6 · ↑↓ · échap</span>
+  </form>
+</div>
+
+<script type="module">
+import { PROFILE as P, SEARCH, PROJECTS, EXPERIENCES, EDUCATION, CERTS, LANGUAGES, SOFT, viewer, VIEWER_CSS } from './c-data.js';
+import { esc, sleep, reduced, typeInto, scramble, printLines, bars, spinner, boot, skillsTree, TERM_CSS } from './c-term.js';
+
+document.head.insertAdjacentHTML('beforeend', `<style>${VIEWER_CSS}${TERM_CSS}</style>`);
+const ph = s => esc(s).replace(/\[([^\]]+)\]/g, '<span class="ph">$1</span>');
+const cmd = (c, a = '') => `<div class="cmd">$ <b>${c}</b> ${a}</div>`;
+
+// ── Vues ───────────────────────────────────────────────────────────────
+const V = {
+  whoami: { file: 'whoami.md', run: 'cat whoami.md', html: () => `${cmd('cat', 'whoami.md')}
+<pre class="ascii">
+ ██╗  ██╗   ██╗ █████╗ ███╗   ███╗
+ ██║  ╚██╗ ██╔╝██╔══██╗████╗ ████║
+ ██║   ╚████╔╝ ███████║██╔████╔██║
+ ██║    ╚██╔╝  ██╔══██║██║╚██╔╝██║
+ ███████╗██║   ██║  ██║██║ ╚═╝ ██║
+ ╚══════╝╚═╝   ╚═╝  ╚═╝╚═╝     ╚═╝</pre>
+<h1 class="name" data-scramble>Mafray-Lizé</h1>
+<p class="sub">Fullstack, IA &amp; Data<i class="cursor"></i></p>
+<p>${esc(P.pitch)}</p>
+<h2>en bref</h2>
+<table>
+  <tr><td class="kc">formation</td><td>${P.school} — ${P.schoolPlace}</td></tr>
+  <tr><td class="kc">alternance</td><td><a href="${P.companyUrl}">${P.company}</a> <span class="c">· ${P.companyDesc}</span></td></tr>
+  <tr><td class="kc">freelance</td><td>${P.freelance}</td></tr>
+  <tr><td class="kc">zone</td><td>${P.location}</td></tr>
+</table>
+<h2>recherche</h2>
+<p class="n">→ Alternance en ${SEARCH.title}</p>
+<table>${SEARCH.items.map(s => `<tr><td class="kc">${s.k.toLowerCase()}</td><td>${esc(s.v)} <span class="c">— ${esc(s.d)}</span></td></tr>`).join('')}</table>
+<h2>langues</h2>
+<table>${LANGUAGES.map((l, i) => `<tr><td class="kc" style="color:var(--fg)">${l.name.toLowerCase()}</td><td><span data-bar="${l.score / 5}"></span></td><td class="c">${l.level} — ${l.detail.toLowerCase()}</td></tr>`).join('')}</table>
+<h2>systemctl status soft-skills</h2>
+<table class="svc">${SOFT.map(s => `<tr><td class="kc"><span class="dot">●</span> <span style="color:var(--fg)">${s.name.toLowerCase().replace(/[’' ]/g, '-')}</span></td><td class="s" style="white-space:nowrap">active (running)</td><td class="c">${esc(s.desc)}</td></tr>`).join('')}</table>
+<h2>suite</h2>
+<p><a href="#" data-go="projets">→ ls projets/</a> &nbsp; <a href="#" data-go="skills">→ tree skills/</a> &nbsp; <a href="#" data-go="contact">→ ./contact.sh</a></p>` },
+
+  projets: { file: 'projets/', run: 'ls -l projets/', html: () => `${cmd('ls -l', 'projets/')}
+<p class="c">total ${PROJECTS.length} · « voir » ouvre le détail dans un second terminal</p>
+<table class="plist"><tr><th>projet</th><th>statut</th><th class="hide-m">type</th><th class="hide-m">résumé</th><th></th></tr>
+${PROJECTS.map(p => `<tr data-p="${p.id}"><td><strong>${p.id}/</strong></td><td class="s" style="white-space:nowrap">● ${p.status.toLowerCase()}</td>
+  <td class="hide-m"><span class="tag n">${p.kind}</span> <span class="c">${p.context.toLowerCase()} · ${p.year}</span></td>
+  <td class="hide-m c">${esc(p.short)}</td>
+  <td><button class="vbtn" data-open="${p.id}" aria-pressed="false">voir ↗</button></td></tr>`).join('')}</table>
+<h2>stack cumulée</h2>
+<p class="c">${[...new Set(PROJECTS.flatMap(p => p.tags))].map(esc).join(' · ')}</p>` },
+
+  skills: { file: 'skills/', run: 'tree skills/', html: () => `${cmd('tree', 'skills/')}<div id="skills-root"></div>` , after: () => { skillsApi = skillsTree(document.getElementById('skills-root')); } },
+
+  certs: { file: 'certs/', run: 'ls -l certs/', html: () => `${cmd('ls -l', 'certs/')}
+${CERTS.map(g => `<h2>${g.provider} — ${g.items.length} certificats</h2>
+<table><tr><th>cours</th><th>notions couvertes</th><th></th></tr>
+${g.items.map(c => `<tr><td class="kc" style="color:var(--fg)">${c.name}</td><td class="c">${c.topics.map(esc).join(' · ')}</td><td><button class="vbtn" data-view="${c.file}" data-caption="${g.provider} — ${c.name}">voir ↗</button></td></tr>`).join('')}
+</table>`).join('')}` },
+
+  parcours: { file: 'parcours.log', run: 'cat parcours.log', html: () => `${cmd('cat', 'parcours.log')}
+<h2>expérience</h2>
+${EXPERIENCES.map(e => `<div class="log-entry${e.current ? ' cur' : ''}">
+  <div class="h"><span class="c">[${e.start} → ${e.end}]</span><span class="${e.current ? 's' : 'cy'}">${e.current ? 'RUNNING' : 'DONE'}</span></div>
+  <strong>${e.role}</strong> <span class="c">@</span> ${e.orgUrl ? `<a href="${e.orgUrl}">${e.org}</a>` : e.org} <span class="c">· ${e.orgDesc}</span>
+  <ul>${e.points.map(x => `<li>${ph(x)}</li>`).join('')}</ul>
+  ${e.tags.length ? `<p class="c" style="margin-top:4px">tags: ${e.tags.join(', ')}</p>` : ''}
+</div>`).join('')}
+<h2>formation</h2>
+${EDUCATION.map(e => `<div class="log-entry${e.next ? ' nx' : e.current ? ' cur' : ''}">
+  <div class="h"><span class="c">[${e.year}]</span><span class="${e.next ? 'n' : e.current ? 's' : 'cy'}">${e.next ? 'NEXT' : e.current ? 'RUNNING' : 'DONE'}</span></div>
+  <strong>${e.title}</strong> <span class="c">@</span> ${e.school}
+  <ul><li>${esc(e.desc)}</li></ul>
+</div>`).join('')}` },
+
+  contact: { file: 'contact.sh', run: './contact.sh', html: () => `${cmd('./contact.sh')}
+<div class="lines">
+<div class="c">[+] ouverture d'un canal…</div>
+<div class="c">[+] négociation… <span class="s">ok</span></div>
+<div class="s">[+] connexion établie. Alternance, freelance ou simple échange : écrivez-moi.</div>
+</div>
+<h1 style="margin-top:24px;word-break:break-word"><a href="mailto:${P.email}" style="color:var(--fg)">ly.mafraylize<span class="n">@</span>gmail.com</a></h1>
+<table style="max-width:560px">
+  <tr><td class="kc">tél</td><td><a href="${P.phoneHref}">${P.phone}</a></td></tr>
+  <tr><td class="kc">github</td><td><a href="${P.github}">github.com/LyamML</a></td></tr>
+  <tr><td class="kc">linkedin</td><td><a href="${P.linkedin}">${P.name}</a></td></tr>
+  <tr><td class="kc">zone</td><td>${P.location}</td></tr>
+</table>` },
+};
+const names = Object.keys(V);
+let skillsApi = null;
+
+document.getElementById('files').innerHTML = names.map((n, i) =>
+  `<button data-v="${n}"><span class="t">${i === names.length - 1 ? '└─ ' : '├─ '}</span>${V[n].file}<span class="key">${i + 1}</span></button>`).join('');
+document.getElementById('who').innerHTML = `<span class="dot">●</span> <b>en alternance</b><br>${P.company} · ${P.schoolPlace}<span class="n">→ cherche une alternance<br>Mastère IA &amp; Data · 2027</span>`;
+
+const view = document.getElementById('view'), path = document.getElementById('path');
+const btns = [...document.querySelectorAll('#files button')];
+let cur = 0, token = 0;
+
+// Changer de vue : la commande se tape dans la barre, puis la sortie s'imprime ligne à ligne
+async function show(name, extra = '') {
+  const i = names.indexOf(name);
+  if (i < 0) return;
+  const my = ++token;
+  cur = i;
+  btns.forEach(b => b.classList.toggle('on', b.dataset.v === name));
+  history.replaceState(null, '', '#' + name);
+  await typeInto(path, V[name].run, 14);
+  if (my !== token) return;
+  view.innerHTML = extra + V[name].html();
+  view.scrollTop = 0;
+  V[name].after?.();
+  printLines(view);
+  bars(view);
+  view.querySelectorAll('[data-scramble]').forEach(el => scramble(el, el.textContent.toUpperCase(), 700));
+  syncOpenButtons();
+}
+btns.forEach(b => b.onclick = () => show(b.dataset.v));
+view.addEventListener('click', e => {
+  const a = e.target.closest('[data-go]');
+  if (a) { e.preventDefault(); show(a.dataset.go); }
+  const o = e.target.closest('[data-open]');
+  if (o) openProject(o.dataset.open);
+});
+
+// ── Second terminal : détail d'un projet ──────────────────────────────────
+const panes = document.getElementById('panes'), sideBody = document.getElementById('side-body'), sideTitle = document.getElementById('side-title');
+let openId = null;
+function syncOpenButtons() {
+  view.querySelectorAll('[data-open]').forEach(b => {
+    const on = b.dataset.open === openId;
+    b.setAttribute('aria-pressed', on);
+    b.textContent = on ? 'ouvert ◂' : 'voir ↗';
+    b.closest('tr')?.classList.toggle('sel', on);
+  });
+}
+async function openProject(id) {
+  const p = PROJECTS.find(x => x.id === id);
+  if (!p) return;
+  if (openId === id) return closeProject();
+  const wasOpen = panes.classList.contains('split');
+  openId = id;
+  syncOpenButtons();
+  sideTitle.textContent = `${p.id} — README.md`;
+  sideBody.innerHTML = '';
+  if (!wasOpen) {
+    panes.classList.add('split');
+    await sleep(reduced ? 0 : 380);
+  }
+  if (openId !== id) return;
+  sideBody.innerHTML = `<div class="cmd">$ <b class="typed"></b></div>`;
+  await typeInto(sideBody.querySelector('.typed'), `cat projets/${p.id}/README.md`, 12);
+  if (openId !== id) return;
+  sideBody.insertAdjacentHTML('beforeend', `
+    <h1 data-scramble>${p.name}</h1>
+    <p><span class="s">● ${p.status.toLowerCase()}</span> <span class="c">·</span> <span class="tag n">${p.kind}</span> <span class="c">· ${p.context.toLowerCase()} · ${p.year}</span></p>
+    <h2>description</h2>
+    <p>${esc(p.description)}</p>
+    <h2>ce que j'ai fait</h2>
+    <ul class="plus">${p.done.map(d => `<li>${esc(d)}</li>`).join('')}</ul>
+    <h2>stack</h2>
+    <p class="c">${p.tags.map(t => `<span style="color:var(--fg)">${esc(t)}</span>`).join(' · ')}</p>
+    <h2>captures — ${p.images.length}</h2>
+    <div class="shots">${p.images.map((src, i) => `<button data-view="${src}" data-group="${p.id}" data-caption="${p.name}" aria-label="Capture ${i + 1} de ${p.name}"><span class="spin"></span><img src="${src}" alt="" loading="lazy"></button>`).join('')}</div>
+    <h2>lien</h2>
+    <p><a href="${p.url}">→ ${p.url.replace('https://', '')} ↗</a></p>`);
+  printLines(sideBody, { step: 45 });
+  sideBody.querySelectorAll('[data-scramble]').forEach(el => scramble(el, el.textContent.toUpperCase(), 600));
+  sideBody.querySelectorAll('.shots button').forEach(b => {
+    const img = b.querySelector('img'), stop = spinner(b.querySelector('.spin'), 'chargement');
+    const done = () => { stop(); b.querySelector('.spin').remove(); img.classList.add('ok'); };
+    img.complete && img.naturalWidth ? done() : img.addEventListener('load', done, { once: true });
+  });
+  sideBody.scrollTop = 0;
+}
+function closeProject() {
+  openId = null;
+  panes.classList.remove('split');
+  syncOpenButtons();
+}
+document.getElementById('side-close').onclick = closeProject;
+
+// ── Ligne de commande ─────────────────────────────────────────────────────
+const cli = document.getElementById('cli');
+const alias = { ls: 'whoami', whoami: 'whoami', profil: 'whoami', projects: 'projets', competences: 'skills', tree: 'skills', certifications: 'certs', cv: 'parcours', experience: 'parcours', mail: 'contact' };
+const HELP = `<p class="c" style="margin-bottom:16px">commandes : ${names.join(' · ')} · open &lt;projet&gt; · grep &lt;mot&gt; · crt · clear · exit</p>`;
+document.getElementById('form').onsubmit = e => {
+  e.preventDefault();
+  const raw = cli.value.trim(); cli.value = '';
+  if (!raw) return;
+  const [verb, ...rest] = raw.split(/\s+/);
+  const arg = rest.join(' ');
+  const echo = `<div class="out">$ ${esc(raw)}</div>`;
+  if (raw === 'clear') return show(names[cur]);
+  if (['exit', 'q', 'quit'].includes(raw)) return closeProject();
+  if (raw === 'crt') return document.getElementById('crt').click();
+  if (raw.startsWith('sudo')) return show(names[cur], echo + `<p class="k" style="margin-bottom:16px">visiteur n'est pas dans le fichier sudoers. Cet incident sera signalé.</p>`);
+  if (['open', 'voir', 'cat'].includes(verb) && PROJECTS.some(p => arg.includes(p.id))) {
+    const id = PROJECTS.find(p => arg.includes(p.id)).id;
+    return (names[cur] === 'projets' ? Promise.resolve() : show('projets')).then(() => openProject(id));
+  }
+  if (verb === 'grep' && arg) return show('skills').then(() => skillsApi?.filter(arg.replace(/^-\w+\s+/, '')));
+  const word = raw.split(/\s+/).pop().replace(/\.(md|json|log|sh|yml)$/, '').replace(/[./]/g, '').toLowerCase();
+  const target = names.includes(word) ? word : alias[word];
+  if (target) show(target, echo);
+  else show(names[cur], echo + HELP);
+};
+addEventListener('keydown', e => {
+  if (document.querySelector('.viewer.on')) return;
+  if (e.key === 'Escape' && openId) return closeProject();
+  if (document.activeElement === cli || e.target.matches('input')) return;
+  const k = +e.key;
+  if (k >= 1 && k <= names.length) show(names[k - 1]);
+  if (e.key === 'ArrowDown') { e.preventDefault(); show(names[(cur + 1) % names.length]); }
+  if (e.key === 'ArrowUp') { e.preventDefault(); show(names[(cur + names.length - 1) % names.length]); }
+});
+
+viewer();
+
+// ── Thème & CRT ───────────────────────────────────────────────────────────
+const root = document.documentElement;
+document.getElementById('theme').onclick = () => {
+  const light = root.dataset.theme ? root.dataset.theme === 'light' : matchMedia('(prefers-color-scheme: light)').matches;
+  root.dataset.theme = light ? 'dark' : 'light';
+};
+const crtBtn = document.getElementById('crt');
+crtBtn.onclick = () => { const on = document.body.classList.toggle('crt'); crtBtn.setAttribute('aria-pressed', on); };
+
+// ── Démarrage : séquence de boot une fois par session, puis la vue demandée ──
+const start = names.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'whoami';
+let booted = false;
+try { booted = sessionStorage.getItem('booted') === '1'; } catch {}
+(async () => {
+  if (!booted && !reduced) {
+    path.textContent = 'boot';
+    await boot(view);
+    try { sessionStorage.setItem('booted', '1'); } catch {}
+  }
+  show(start);
+})();
+</script>
+<script type="module" src="/lab-switcher.js"></script>
+</body>
+</html>

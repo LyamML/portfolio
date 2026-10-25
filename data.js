@@ -18,7 +18,7 @@ export const PROFILE = {
     linkedin: 'https://www.linkedin.com/in/lyam-mafray-lizé-a5954a235/',
     malt: null, // TODO : lien profil Malt
     cv: null,   // TODO : chemin du CV PDF (ex. '/cv/lyam-mafray-lize.pdf')
-    // Accroches par angle — chaque sous-domaine pioche la sienne.
+    // Accroches par angle - chaque sous-domaine pioche la sienne.
     pitch: {
         main: "Développeur Fullstack & IA en alternance à l'EPSI Rennes. Je conçois des produits web qui intègrent l'IA de bout en bout : de l'API au déploiement.",
         dev:  "Développeur Fullstack : Node.js, TypeScript, React/Vue/Next, Python (FastAPI, Flask), Docker. Je livre des applications complètes, de la base de données au VPS.",
@@ -94,12 +94,12 @@ export const EDUCATION = [
         level: 'Bac+5',
         school: 'EPSI Rennes',
         start: '2027-09', end: '2029-08', period: '2027 – 2029',
-        desc: 'Programme visé en alternance — rentrée septembre 2027.',
+        desc: 'Programme visé en alternance - rentrée septembre 2027.',
         upcoming: true,
     },
     {
         id: 'cda',
-        title: 'Bachelor Concepteur Développeur d\'Applications (CDA)',
+        title: 'Bachelor 3 Concepteur Développeur d\'Applications - EPSI Rennes',
         level: 'Bac+3',
         school: 'EPSI Rennes',
         start: '2026-09', end: '2027-08', period: '2026 – 2027',
@@ -116,7 +116,7 @@ export const EDUCATION = [
     },
     {
         id: 'bac',
-        title: 'BAC STI2D — Mention Bien',
+        title: 'BAC STI2D - Mention Bien',
         level: 'Bac',
         school: 'Saint Joseph LaSalle, Le Mans',
         start: '2020-09', end: '2022-07', period: '2022',
@@ -150,6 +150,10 @@ export const SKILLS = [
         id: 'infra', name: 'Infra & Déploiement', icon: '⚙️', focus: ['dev'],
         items: ['Docker', 'Git', 'GitHub', 'VPS', 'Coolify', 'Nginx'],
     },
+    {
+        id: 'cyber', name: 'Cybersécurité', icon: '🔒', focus: ['dev'],
+        items: ['Security by Design', 'OWASP Top 10', 'Modélisation STRIDE', 'Burp Suite', 'Wireshark', 'Moindre privilège', 'JWT (RFC 8725)', 'Hachage Argon2id / bcrypt'],
+    },
 ];
 
 export const SOFT_SKILLS = [
@@ -163,7 +167,7 @@ export const SOFT_SKILLS = [
 
 // level : 0 → 5 (5 = natif). cefr pour l'affichage.
 export const LANGUAGES = [
-    { name: 'Français', flag: '🇫🇷', cefr: 'Natif', level: 5,   desc: 'Langue natale — maîtrise totale' },
+    { name: 'Français', flag: '🇫🇷', cefr: 'Natif', level: 5,   desc: 'Langue natale - maîtrise totale' },
     { name: 'Anglais',  flag: '🇬🇧', cefr: 'C2-',   level: 4.5, desc: 'Professionnel complet' },
     { name: 'Espagnol', flag: '🇪🇸', cefr: 'B1',    level: 3,   desc: 'Intermédiaire' },
 ];
@@ -205,7 +209,7 @@ export const PROJECTS = [
         tagline: 'Recommandation de jeux par embeddings',
         badges: ['POC', 'Entraînement'],
         year: 2025, // TODO : confirmer l'année
-        description: "Développé après une certification OpenAI pour appliquer les embeddings vectoriels sur un cas concret. Chaque jeu est converti en vecteur sémantique via text-embedding-3-small et classé par similarité cosinus — avec un pool pré-filtré via RAWG pour des résultats pertinents.",
+        description: "Développé après une certification OpenAI pour appliquer les embeddings vectoriels sur un cas concret. Chaque jeu est converti en vecteur sémantique via text-embedding-3-small et classé par similarité cosinus - avec un pool pré-filtré via RAWG pour des résultats pertinents.",
         highlights: [
             'Chaque jeu → vecteur sémantique (nom, genres, tags) via text-embedding-3-small',
             'Classement par similarité cosinus sur un pool de 100 candidats pré-filtrés via RAWG',
@@ -221,7 +225,7 @@ export const PROJECTS = [
     },
 ];
 
-// Offre freelance (tirée de l'expérience Malt) — TODO : ajuster les intitulés si besoin.
+// Offre freelance (tirée de l'expérience Malt) - TODO : ajuster les intitulés si besoin.
 export const SERVICES = [
     { name: 'Automatisation IA', desc: 'Workflows n8n / Make connectés à vos outils et à des LLMs.', tools: ['n8n', 'Make', 'Zapier', 'OpenAI API'] },
     { name: "Intégration d'APIs", desc: "Connexion d'APIs tierces et automatisation de processus métier, spécifications comprises.", tools: ['APIs REST', 'Airtable API', 'Stripe', 'Scraping'] },
@@ -257,5 +261,5 @@ export function monthsOfExperience(now = new Date()) {
     return months.size;
 }
 
-// Sections dans l'ordre conseillé — chaque page doit toutes les afficher.
+// Sections dans l'ordre conseillé - chaque page doit toutes les afficher.
 export const SECTIONS = ['recherche', 'projets', 'experiences', 'formations', 'competences', 'soft-skills', 'certifications', 'langues', 'contact'];

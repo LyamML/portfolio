@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Labo terminal — animations & compétences</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root { --bg: #0d0c0a; --panel: #13120f; --fg: #e8dfcc; --dim: #8f8775; --faint: #3a362d; --amber: #ffb547; --red: #ff6b5b; --green: #8fd694; --cyan: #7cc7d6; --mono: 'JetBrains Mono', ui-monospace, monospace; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) { --bg: #efe9dc; --panel: #f7f3ea; --fg: #24211b; --dim: #6a6353; --faint: #d2c9b5; --amber: #a0590a; --red: #b8382a; --green: #2f7a3a; --cyan: #1f6f80; } }
+:root[data-theme="light"] { --bg: #efe9dc; --panel: #f7f3ea; --fg: #24211b; --dim: #6a6353; --faint: #d2c9b5; --amber: #a0590a; --red: #b8382a; --green: #2f7a3a; --cyan: #1f6f80; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--fg); font-family: var(--mono); font-size: 14px; line-height: 1.6; padding: 32px 20px 80px; }
+a { color: var(--cyan); }
+.wrap { max-width: 1300px; margin: 0 auto; }
+header h1 { font-size: 28px; color: var(--amber); }
+header p { color: var(--dim); max-width: 90ch; margin-top: 6px; }
+header nav { margin-top: 14px; display: flex; gap: 18px; flex-wrap: wrap; }
+h2.part { margin: 48px 0 14px; font-size: 13px; text-transform: uppercase; letter-spacing: .1em; color: var(--amber); border-bottom: 1px solid var(--faint); padding-bottom: 8px; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid.one { grid-template-columns: 1fr; }
+.card { border: 1px solid var(--faint); background: var(--panel); display: flex; flex-direction: column; min-width: 0; }
+.card-h { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 14px; border-bottom: 1px solid var(--faint); }
+.card-h b { color: var(--fg); }
+.card-h .st { font-size: 11px; padding: 0 6px; border: 1px solid currentColor; white-space: nowrap; }
+.card-h .st.on { color: var(--green); }
+.card-h .st.opt { color: var(--dim); }
+.card-h button { all: unset; cursor: pointer; color: var(--cyan); white-space: nowrap; }
+.card-h button:hover { text-decoration: underline; }
+.card .why { padding: 8px 14px 0; color: var(--dim); font-size: 12.5px; }
+.stage { padding: 14px; min-height: 150px; overflow: auto; flex: 1; }
+.stage.tall { max-height: 460px; }
+.c { color: var(--dim); } .s { color: var(--green); } .n { color: var(--amber); } .k { color: var(--red); }
+.big { font-size: 34px; font-weight: 700; color: var(--amber); }
+.split-demo { display: flex; height: 140px; border: 1px solid var(--faint); }
+.split-demo .l { flex: 1; padding: 10px; }
+.split-demo .r { flex: 0 0 0%; overflow: hidden; position: relative; transition: flex-basis .5s cubic-bezier(.7,0,.2,1); }
+.split-demo .r::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--amber); transform: scaleY(0); transform-origin: top; transition: transform .35s; }
+.split-demo.on .r { flex-basis: 55%; }
+.split-demo.on .r::before { transform: scaleY(1); }
+.split-demo .r > div { padding: 10px 12px; min-width: 220px; }
+.crt-demo { position: relative; padding: 14px; border: 1px solid var(--faint); }
+.crt-demo.on { text-shadow: 0 0 6px color-mix(in srgb, var(--amber) 40%, transparent); }
+.crt-demo.on::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(to bottom, rgba(0,0,0,.2) 0 1px, transparent 1px 3px), radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.4) 100%); animation: flicker 4s infinite steps(1); }
+@keyframes flicker { 0%, 100% { opacity: 1; } 47% { opacity: .85; } 48% { opacity: 1; } 82% { opacity: .92; } }
+.cursor { display: inline-block; width: .55em; height: 1em; background: var(--amber); vertical-align: -2px; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+@media (max-width: 860px) { .grid { grid-template-columns: 1fr; } body { padding: 20px 12px 60px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>~/labo</h1>
+    <p>Variantes d'animations et de vue compétences pour la maquette terminal. <span class="s">[actif]</span> = déjà branché dans <a href="/dev/c.html">DEV C</a>, <span class="c">[option]</span> = à ajouter ou à échanger si tu préfères. Chaque bloc se rejoue.</p>
+    <nav><a href="#anims">→ animations</a><a href="#skills">→ vues compétences</a><a href="/dev/c.html">→ retour à la maquette</a></nav>
+  </header>
+
+  <h2 class="part" id="anims">// animations</h2>
+  <div class="grid">
+    <div class="card"><div class="card-h"><b>A1 · boot systemd</b><span class="st on">actif</span><button data-run="boot">▶ rejouer</button></div>
+      <p class="why">Au premier chargement (une fois par session). Le [ WAIT ] glisse le message « je cherche une alternance » de façon ludique. Passable d'une touche.</p>
+      <div class="stage" id="s-boot"></div></div>
+
+    <div class="card"><div class="card-h"><b>A2 · commande tapée + impression</b><span class="st on">actif</span><button data-run="print">▶ rejouer</button></div>
+      <p class="why">À chaque changement de page : la commande se tape dans la barre, puis la sortie se déroule ligne par ligne.</p>
+      <div class="stage" id="s-print"></div></div>
+
+    <div class="card"><div class="card-h"><b>A3 · décodage du titre</b><span class="st on">actif</span><button data-run="scramble">▶ rejouer</button></div>
+      <p class="why">Sur MAFRAY-LIZÉ et sur le nom du projet ouvert dans le second terminal.</p>
+      <div class="stage"><div class="big" id="s-scramble">MAFRAY-LIZÉ</div></div></div>
+
+    <div class="card"><div class="card-h"><b>A4 · barres de progression</b><span class="st on">actif</span><button data-run="bars">▶ rejouer</button></div>
+      <p class="why">Langues dans whoami.md. Pourrait aussi servir pour un « chargement » de page.</p>
+      <div class="stage" id="s-bars"></div></div>
+
+    <div class="card"><div class="card-h"><b>A5 · split tmux</b><span class="st on">actif</span><button data-run="split">▶ rejouer</button></div>
+      <p class="why">Le bouton « voir » d'un projet : le séparateur se trace, le panneau s'ouvre, puis le README s'imprime.</p>
+      <div class="stage"><div class="split-demo" id="s-split"><div class="l"><span class="s">$</span> ls projets/<br>menucash/ <span style="color:var(--cyan)">voir ↗</span></div><div class="r"><div id="s-split-r"></div></div></div></div></div>
+
+    <div class="card"><div class="card-h"><b>A6 · spinner de chargement</b><span class="st on">actif</span><button data-run="spin">▶ rejouer</button></div>
+      <p class="why">Sur les captures du second terminal, le temps que les images chargent.</p>
+      <div class="stage" id="s-spin"></div></div>
+
+    <div class="card"><div class="card-h"><b>A7 · mode CRT</b><span class="st opt">option · bouton [crt]</span><button data-run="crt">▶ basculer</button></div>
+      <p class="why">Scanlines, vignettage, lueur et léger scintillement. Désactivé par défaut (lisibilité), activable dans la barre du haut.</p>
+      <div class="stage"><div class="crt-demo" id="s-crt"><span class="s">$</span> whoami<br><span class="big" style="font-size:24px">MAFRAY-LIZÉ</span><br>Fullstack, IA &amp; Data<span class="cursor"></span></div></div></div>
+
+    <div class="card"><div class="card-h"><b>A8 · réponse « sudo »</b><span class="st on">actif</span><button data-run="sudo">▶ rejouer</button></div>
+      <p class="why">Easter egg classique : taper sudo dans l'invite. D'autres possibles : <span class="n">rm -rf /</span>, <span class="n">hire lyam</span>, <span class="n">coffee</span>.</p>
+      <div class="stage" id="s-sudo"></div></div>
+  </div>
+
+  <h2 class="part" id="skills">// vues compétences</h2>
+  <div class="grid">
+    <div class="card"><div class="card-h"><b>S1 · tree + grep</b><span class="st on">actif</span></div>
+      <p class="why">Dossiers dépliables, filtre en direct (essaie « python » ou « ml »), et pour chaque outil l'endroit où il est prouvé : projet, expérience ou certif.</p>
+      <div class="stage tall" id="sk-tree"></div></div>
+
+    <div class="card"><div class="card-h"><b>S2 · commandes par famille</b><span class="st opt">option</span></div>
+      <p class="why">Chaque famille est une commande : on clique, elle se tape et la sortie s'empile comme un vrai historique.</p>
+      <div class="stage tall" id="sk-cmds"></div></div>
+
+    <div class="card"><div class="card-h"><b>S3 · extraits de code (cat)</b><span class="st opt">option</span></div>
+      <p class="why">Un extrait dépliable par famille. Montre le niveau réel plutôt qu'une liste. Combinable avec S1 (une ligne « cat exemple » par dossier).</p>
+      <div class="stage tall" id="sk-snip"></div></div>
+
+    <div class="card"><div class="card-h"><b>S4 · tableau htop</b><span class="st opt">option</span></div>
+      <p class="why">Tous les outils dans un tableau triable (par nom, famille ou nombre de preuves).</p>
+      <div class="stage tall" id="sk-htop"></div></div>
+  </div>
+</div>
+
+<script type="module">
+import { LANGUAGES } from './c-data.js';
+import { typeInto, scramble, printLines, bars, spinner, boot, sleep, skillsTree, skillsCommands, skillsSnippets, skillsHtop, TERM_CSS } from './c-term.js';
+document.head.insertAdjacentHTML('beforeend', `<style>${TERM_CSS}</style>`);
+const $ = id => document.getElementById(id);
+
+const RUN = {
+  boot: () => boot($('s-boot'), { speed: 160 }),
+  async print() {
+    const s = $('s-print');
+    s.innerHTML = `<div><span class="s">$</span> <span class="t"></span></div>`;
+    await typeInto(s.querySelector('.t'), 'cat parcours.log', 40);
+    s.insertAdjacentHTML('beforeend', `<div class="lines" style="margin-top:6px">
+      <div><span class="c">[2026 → auj.]</span> <span class="s">RUNNING</span> Alternant @ KenavHome</div>
+      <div><span class="c">[2025 → auj.]</span> <span class="s">RUNNING</span> Freelance automatisation IA @ Malt</div>
+      <div><span class="c">[2022 → 2024]</span> <span style="color:var(--cyan)">DONE</span> Alternant conception web @ France Bâtiment</div>
+      <div><span class="c">[2027 →]</span> <span class="n">NEXT</span> Mastère / MBA Expert IA &amp; Data</div></div>`);
+    printLines(s.querySelector('.lines'), { step: 120 });
+  },
+  scramble: () => scramble($('s-scramble'), 'MAFRAY-LIZÉ', 900),
+  bars() {
+    $('s-bars').innerHTML = `<table>${LANGUAGES.map((l, i) => `<tr><td style="padding-right:14px">${l.name.toLowerCase()}</td><td><span data-bar="${l.score / 5}" data-delay="${i * 200}"></span></td></tr>`).join('')}
+      <tr><td style="padding-right:14px" class="c">chargement</td><td><span data-bar="1" data-delay="700" data-width="28"></span></td></tr></table>`;
+    bars($('s-bars'), { duration: 1100 });
+  },
+  async split() {
+    const d = $('s-split'), r = $('s-split-r');
+    d.classList.remove('on'); r.innerHTML = '';
+    await sleep(500);
+    d.classList.add('on');
+    await sleep(420);
+    r.innerHTML = `<div><span class="s">$</span> <span class="t"></span></div>`;
+    await typeInto(r.querySelector('.t'), 'cat menucash/README.md', 22);
+    r.insertAdjacentHTML('beforeend', `<div class="n" style="font-weight:700;font-size:18px" id="sp-h">MENU CASH</div><div class="s">● en ligne</div><div class="c">SaaS d'audit de carte par IA…</div>`);
+    scramble($('sp-h'), 'MENU CASH', 500);
+    printLines(r, { step: 70 });
+  },
+  async spin() {
+    const s = $('s-spin');
+    s.innerHTML = `<div id="sp1"></div><div id="sp2"></div><div id="sp3"></div>`;
+    const a = spinner($('sp1'), 'chargement de screen1.png'), b = spinner($('sp2'), 'chargement de screen2.png'), c = spinner($('sp3'), 'npm run build');
+    await sleep(900); a(); $('sp1').innerHTML = '<span class="s">✔</span> screen1.png';
+    await sleep(500); b(); $('sp2').innerHTML = '<span class="s">✔</span> screen2.png';
+    await sleep(700); c(); $('sp3').innerHTML = '<span class="s">✔</span> build terminé en 1.2s';
+  },
+  crt: () => $('s-crt').classList.toggle('on'),
+  async sudo() {
+    const s = $('s-sudo');
+    s.innerHTML = `<div><span class="s">visiteur@portfolio:~$</span> <span class="t"></span></div>`;
+    await typeInto(s.querySelector('.t'), 'sudo hire lyam', 60);
+    await sleep(300);
+    s.insertAdjacentHTML('beforeend', `<div class="k">visiteur n'est pas dans le fichier sudoers. Cet incident sera signalé.</div><div class="c" style="margin-top:6px">astuce : <span class="n">./contact.sh</span> fonctionne sans droits root.</div>`);
+  },
+};
+document.querySelectorAll('[data-run]').forEach(b => b.onclick = () => RUN[b.dataset.run]());
+// Tout jouer une fois au chargement
+Object.entries(RUN).forEach(([k, f]) => k !== 'crt' && f());
+$('s-crt').classList.add('on');
+
+skillsTree($('sk-tree'));
+skillsCommands($('sk-cmds'));
+skillsSnippets($('sk-snip'));
+skillsHtop($('sk-htop'));
+</script>
+</body>
+</html>
